@@ -13,7 +13,7 @@
 #include <ctime>
 #include <cassert>
 #include <vector>
-#include "player_.h"
+#include "Player.h"
 #define max 5
 
 
