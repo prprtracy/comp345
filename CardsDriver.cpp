@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include "Cards.h"
-#include "player_.h"
+#include "Player.h"
 using namespace std;
 int main() {
 
