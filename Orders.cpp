@@ -17,7 +17,7 @@ Orders::Orders(string str)
     order_type = str;
 }
 
-Orders::Orders(const Orders & order) {
+Orders::Orders(const Orders& order) {
     this->order_type = order.order_type;
 }
 
@@ -55,7 +55,7 @@ Deploy::Deploy()
     order_type = "Deploy";
 }
 
-Deploy::Deploy(const Deploy & deploy) {
+Deploy::Deploy(const Deploy& deploy) {
 
     this->order_type = deploy.order_type;
 }
@@ -98,7 +98,7 @@ Advance::Advance()
 }
 
 
-Advance::Advance(const Advance & advance) {
+Advance::Advance(const Advance& advance) {
     this->order_type = advance.order_type;
 }
 
@@ -134,31 +134,31 @@ ostream& operator<<(ostream& os, const Advance& advance) {
 }
 
 //Bomb implementation
-Bomb::Bomb()
+BombO::BombO()
 {
     order_type = "Bomb";
 }
 
 
-Bomb::Bomb(const Bomb & bomb) {
+BombO::BombO(const BombO& bomb) {
     this->order_type = bomb.order_type;
 }
 
-Bomb& Bomb::operator=(const Bomb& bomb) {
+BombO& BombO::operator=(const BombO& bomb) {
     this->order_type = bomb.order_type;
     return *this;
 }
 
-Bomb::~Bomb()
+BombO::~BombO()
 {
 }
 
-bool Bomb::validate() {
+bool BombO::validate() {
     cout << "This is the validate method for verify the Bomb order." << endl;
     return true;
 }
 
-void Bomb::execute() {
+void BombO::execute() {
     if (validate()) {
         cout << "This Bomb order is valid and prepare to execute." << endl;
     }
@@ -167,11 +167,11 @@ void Bomb::execute() {
     }
 }
 
-string Bomb::get_order() {
+string BombO::get_order() {
     return this->order_type;
 }
 
-ostream& operator<<(ostream& os, const Bomb& bomb) {
+ostream& operator<<(ostream& os, const BombO& bomb) {
     return os << bomb.order_type << endl;
 }
 
@@ -182,7 +182,7 @@ Blockade::Blockade()
 }
 
 
-Blockade::Blockade(const Blockade & blockade) {
+Blockade::Blockade(const Blockade& blockade) {
     this->order_type = blockade.order_type;
 }
 
@@ -223,7 +223,7 @@ Airlift::Airlift()
     order_type = "Airlift";
 }
 
-Airlift::Airlift(const Airlift & airlift) {
+Airlift::Airlift(const Airlift& airlift) {
     this->order_type = airlift.order_type;
 }
 
@@ -264,7 +264,7 @@ Negotiate::Negotiate()
     order_type = "Negotiate";
 }
 
-Negotiate::Negotiate(const Negotiate & negotiate) {
+Negotiate::Negotiate(const Negotiate& negotiate) {
     this->order_type = negotiate.order_type;
 }
 
@@ -316,7 +316,7 @@ OrderList::~OrderList()
     this->order_list.clear();
 }
 
-OrderList::OrderList(const OrderList & ol) {
+OrderList::OrderList(const OrderList& ol) {
     order_list = ol.order_list;
 }
 
@@ -360,9 +360,9 @@ ostream& operator<<(ostream& os, const OrderList& ol) {
     os << "Order list:" << endl;
     for (int i = 0; i < ol.order_list.size(); i++) {
         Orders* curr = ol.order_list.at(i);
-        os << i+1 << " " << curr << endl;
-        os << i+1 << " " << curr->get_order() << endl;
-        
+        os << i + 1 << " " << curr << endl;
+        os << i + 1 << " " << curr->get_order() << endl;
+
     }
     return os;
 }

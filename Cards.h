@@ -79,16 +79,16 @@ public:
 //====================== Deck ==========================//
 
 class Deck {
-/*private:
-	struct Node;
-	typedef Node* Link;
-	struct Node {
-		string cardName;
-		Link next;
-	};
-	Link head;
-	Link tail;
-	Link current;*/
+	/*private:
+		struct Node;
+		typedef Node* Link;
+		struct Node {
+			string cardName;
+			Link next;
+		};
+		Link head;
+		Link tail;
+		Link current;*/
 protected:
 public:
 

@@ -60,8 +60,8 @@ string reinforcement::getCardname() {
 
 void reinforcement::play() {
 	Player* player = this->playerName;
-	cout << "you played card reinforcement" ;
-	
+	cout << "you played card reinforcement";
+
 	this->d->insert(this);//added reinforcement cards back to the deck
 
 	//delete card's owner once it has been played
@@ -306,7 +306,7 @@ Hand::Hand(Hand& player) {
 	this->cardsOnHand = player.cardsOnHand;
 }
 //set the player on round's hand cards
-Hand::Hand(Player* playerName,std::vector<Card*>COP) {
+Hand::Hand(Player* playerName, std::vector<Card*>COP) {
 	this->player = playerName;
 	this->player->setCardsOnHand(this);
 	this->cardsOnHand = COP;
@@ -323,7 +323,7 @@ vector<Card*> Hand::getCardsOnHand() {
 }
 void Hand::remove(int n) {
 
-	
+
 	//find the card that already been played 
 	auto cardsplayed = find(this->cardsOnHand.begin(), this->cardsOnHand.end(), this->cardsOnHand.at(0));
 

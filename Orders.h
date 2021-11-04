@@ -23,7 +23,7 @@ public:
 	Orders();
 	~Orders();
 	Orders(string);
-	Orders(const Orders & order);
+	Orders(const Orders& order);
 	Orders& operator = (const Orders& order);
 	/*
 	* define the validate, execute as virtual function,
@@ -42,7 +42,7 @@ class Deploy : public Orders
 public:
 	Deploy();
 	~Deploy();
-	Deploy(const Deploy & deploy);
+	Deploy(const Deploy& deploy);
 	Deploy& operator = (const Deploy& deploy);
 	/*
 	* each subclass need to overwrite the validate and exectue
@@ -61,7 +61,7 @@ class Advance : public Orders
 public:
 	Advance();
 	~Advance();
-	Advance(const Advance & advance);
+	Advance(const Advance& advance);
 	Advance& operator = (const Advance& advance);
 	/*
 	* each subclass need to overwrite the validate and exectue
@@ -75,19 +75,19 @@ private:
 	string order_type;
 };
 
-class Bomb : public Orders
+class BombO : public Orders
 {
 public:
-	Bomb();
-	~Bomb();
-	Bomb(const Bomb & bomb);
-	Bomb& operator = (const Bomb& bomb);
+	BombO();
+	~BombO();
+	BombO(const BombO& bomb);
+	BombO& operator = (const BombO& bomb);
 	/*
 	* each subclass need to overwrite the validate and exectue
 	*/
 	bool validate() override;
 	void execute() override;
-	friend ostream& operator<<(ostream& os, const Bomb& bomb);
+	friend ostream& operator<<(ostream& os, const BombO& bomb);
 	string get_order() override;
 
 private:
@@ -99,7 +99,7 @@ class Blockade : public Orders
 public:
 	Blockade();
 	~Blockade();
-	Blockade(const Blockade & blockade);
+	Blockade(const Blockade& blockade);
 	Blockade& operator = (const Blockade& blockade);
 	/*
 	* each subclass need to overwrite the validate and exectue
@@ -118,7 +118,7 @@ class Airlift : public Orders
 public:
 	Airlift();
 	~Airlift();
-	Airlift(const Airlift & airlift);
+	Airlift(const Airlift& airlift);
 	Airlift& operator = (const Airlift& airlift);
 	/*
 	* each subclass need to overwrite the validate and exectue
@@ -137,7 +137,7 @@ class Negotiate : public Orders
 public:
 	Negotiate();
 	~Negotiate();
-	Negotiate(const Negotiate & negotiate);
+	Negotiate(const Negotiate& negotiate);
 	Negotiate& operator = (const Negotiate& negotiate);
 	/*
 	* each subclass need to overwrite the validate and exectue methods
@@ -156,7 +156,7 @@ class OrderList
 public:
 	OrderList();
 	~OrderList();
-	OrderList(const OrderList & order_list);
+	OrderList(const OrderList& order_list);
 	OrderList& operator = (const OrderList& orderList);
 	void add(Orders* order);
 	void move(int old_position, int new_position);// according the index of a order move to a new position

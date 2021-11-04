@@ -40,12 +40,13 @@ void Player::issueOrder(string order) {
 	if (order == "Deploy") {
 		Deploy* d = new Deploy();
 		orderList->add(d);
-	} else if (order == "Advance") {
+	}
+	else if (order == "Advance") {
 		Advance* ad = new Advance();
 		orderList->add(ad);
 	}
 	else if (order == "Bomb") {
-		Bomb* bo = new Bomb();
+		BombO* bo = new BombO();
 		orderList->add(bo);
 	}
 	else if (order == "Blockade") {
@@ -76,4 +77,12 @@ OrderList* Player::get_orderList() {
 
 void Player::print_orderList() {
 	this->orderList->print_ol();
+}
+
+Hand* Player::getHandOfPlayer() {
+	return this->hand;
+}
+
+void Player::setCardsOnHand(Hand* hand) {
+	this->hand = hand;
 }
