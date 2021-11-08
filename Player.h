@@ -16,6 +16,7 @@ private:
 	OrderList* orderList;
 	string name;
 	Hand* hand;
+    int reinforcementPool;
 
 public:
 	//constructors
@@ -38,4 +39,9 @@ public:
 	void setCardsOnHand(Hand* hand);
 	//get the hand cards of the player
 	Hand* getHandOfPlayer();
+
+    // Getter and setter for reinforcementPool
+    int getReinforcementPool() { return reinforcementPool; };
+    void setReinforcementPool(int a) { reinforcementPool = a; };
+
 };

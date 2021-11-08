@@ -67,3 +67,32 @@ void Engine::exeOrder() {
 void Engine::endExeOrder() {
 	//Cases close and ruin constructors
 }
+
+void Engine::reinforcementPhase(Player* currPlayer)
+{
+    cout << "\nConduct Reinforcement Phase" << endl;
+    const int MINIMUM_NUM_ARMIES = 3; // the minimal number of reinforcement armies per turn for any player is 3
+    int bonusArmies = 0; // if Player gets bonus reinforcements from owning whole Continent
+
+    Continent* currContinent = nullptr; // for readability
+
+    for (int i = 0; i < map->allContinentsInMap.size(); i++)
+    {
+        currContinent = map->allContinentsInMap[i];
+
+        if (currContinent->controlsContinent(currPlayer))
+            bonusArmies += currContinent->armyvalue;
+    }
+    currContinent = nullptr;
+
+    // Player gets number of armies equal to their number of Territories / 3, unless this number is less than 3
+    if ((currPlayer->getTerritories().size() / 3) > newArmies)
+        newArmies = currPlayer->getTerritories().size() / 3;
+
+    cout << "Player " << currPlayer->getPlayerNumber() << " will receive " << newArmies << " new reinforcements "
+         << "and " << bonusArmies << " bonus reinforcements." << endl;
+    currPlayer->addReinforcements(newArmies + bonusArmies); // add armies
+}
+
+
+

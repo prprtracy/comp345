@@ -86,3 +86,4 @@ Hand* Player::getHandOfPlayer() {
 void Player::setCardsOnHand(Hand* hand) {
 	this->hand = hand;
 }
+

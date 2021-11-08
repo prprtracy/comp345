@@ -31,6 +31,8 @@ private:
 	Deck* deck;
 	int playersNum;
 
+    Map* map;
+
 public:
 	Engine();
 	
@@ -78,6 +80,17 @@ public:
 	void exeOrder();
 	void endExeOrder();
 	void win();
+
+
+    //set the phases
+    void mainGameLoop();
+    void reinforcementPhase(Player* currPlayer); // void for now
+    void issueOrdersPhase(Player* currPlayer);
+    void executeOrdersPhase(Player* currPlayer);
+
+    vector<Player*> getPlayers();
+
+
 	void end() {
 		exit(0);
 	}
