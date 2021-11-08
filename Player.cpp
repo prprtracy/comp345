@@ -87,3 +87,10 @@ void Player::setCardsOnHand(Hand* hand) {
 	this->hand = hand;
 }
 
+vector<Territory*> Player::getTerritories()
+{
+    vector<Territory*> t = this->territories;
+
+    return t;
+}
+

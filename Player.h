@@ -3,6 +3,7 @@
 #include <vector>
 #include "Orders.h"
 #include "Cards.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -40,8 +41,15 @@ public:
 	//get the hand cards of the player
 	Hand* getHandOfPlayer();
 
+    // territories belonging to the player
+    std::vector<Territory*> territories;
+    //get all territories belong to the player
+    vector<Territory*> getTerritories();
+
+
     // Getter and setter for reinforcementPool
     int getReinforcementPool() { return reinforcementPool; };
     void setReinforcementPool(int a) { reinforcementPool = a; };
+
 
 };
