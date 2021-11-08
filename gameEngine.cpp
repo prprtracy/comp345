@@ -74,19 +74,19 @@ void Engine::reinforcementPhase(Player* currPlayer)
     const int MINIMUM_NUM_ARMIES = 3; // the minimal number of reinforcement armies per turn for any player is 3
     int bonusArmies = 0; // if Player gets bonus reinforcements from owning whole Continent
 
-    Continent* currContinent = nullptr; // for readability
+    Continent* currContinent = nullptr;
 
     for (int i = 0; i < map->allContinentsInMap.size(); i++)
     {
         currContinent = map->allContinentsInMap[i];
 
         if (currContinent->controlsContinent(currPlayer))
-            bonusArmies += currContinent->armyvalue;
+            bonusArmies += currContinent->bonusArmies;
     }
     currContinent = nullptr;
 
     // Player gets number of armies equal to their number of Territories / 3, unless this number is less than 3
-    if ((currPlayer->getTerritories().size() / 3) > newArmies)
+    if ((currPlayer->get_territories().size() / 3) > newArmies)
         newArmies = currPlayer->getTerritories().size() / 3;
 
     cout << "Player " << currPlayer->getPlayerNumber() << " will receive " << newArmies << " new reinforcements "

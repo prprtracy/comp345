@@ -326,6 +326,18 @@ Territory * Map::getTerritoryByName(string name)
 	return NULL;
 }
 
+// Checks if the input Player owns all Territories of this Continent. Returns true if yes, otherwise returns false.
+// used in GameEngine::reinforcementPhase()
+bool Continent::controlsContinent(Player* player)
+{
+    for (int i = 0; i < this->allTerritoriesInConti.size(); i++)
+    {
+        if (this->allTerritoriesInConti[i]->owner != player)
+            return false;
+    }
+    return true;
+}
+
 //=============================================Territory================================================
 //  Default Constructor
 Territory::Territory()

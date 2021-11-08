@@ -70,6 +70,9 @@ public:
 	void printTerritories();
 	Territory* getTerritoryByID(int id);
     friend ostream & operator << (ostream &out, const Continent &c);
+
+    bool controlsContinent(Player* player); // checks if the input Player owns the entire Continent
+
 };
 //-----------------------------------------Map-----------------------------
 class Map
