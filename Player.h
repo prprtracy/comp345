@@ -31,6 +31,10 @@ public:
 	void toAttack();
 	void toDeffend();
 	void issueOrder(string);
+
+    //void issueOrder() {return this->playerStrategy->issueOrder();};
+
+
 	string get_name();
 	//print out the address of the player's orderlist
 	OrderList* get_orderList();

@@ -91,14 +91,35 @@ void Engine::reinforcementPhase(Player* currPlayer)
     if ((currPlayer->getTerritories().size() / 3) > reinforcement)
         reinforcement = currPlayer->getTerritories().size() / 3;
 
-
-    currPlayer->setReinforcementPool(reinforcement + bonusArmies); // add armies
+// add armies to the reinforcement pool
+    currPlayer->setReinforcementPool(reinforcement + bonusArmies);
 
     cout << currPlayer->get_name() << " received " << reinforcement << " new reinforcements "
          << "and " << bonusArmies << " bonus reinforcements." << endl;
     cout << " In total the player has " << currPlayer->getReinforcementPool() << " armies in their reinforcement pool." << endl;
+    cout << "\nEnd of Reinforcement Phase" << endl;
 
 }
+
+// Calls the issueOrder method of the player's strategy class
+void Engine::issueOrdersPhase(Player* currPlayer) {
+
+    string o;
+    cout<<"Issue Order Phase"<<endl;
+    cout<<"\nPlease enter your order: Deploy, Advance, Bomb, Blockade, Airlift, Negotiate"<<endl;
+    cin >> o;
+    currPlayer->issueOrder(o);
+
+}
+
+
+
+
+
+
+
+
+
 
 
 
