@@ -71,27 +71,33 @@ void Engine::endExeOrder() {
 void Engine::reinforcementPhase(Player* currPlayer)
 {
     cout << "\nConduct Reinforcement Phase" << endl;
-    int MINIMUM_NUM_ARMIES = 3; // the minimal number of reinforcement armies per turn for any player is 3
+
     int bonusArmies = 0; // owning whole Continent bonus
+    int reinforcement =3; //the min of reinforcement armies is 3
 
+    //check if the player owns the Continent
     Continent* currContinent = nullptr;
-
+    //going through each Continent
     for (int i = 0; i < map->allContinentsInMap.size(); i++)
     {
         currContinent = map->allContinentsInMap[i];
-
+//if the player owns the continent, he/she will get the bonus armies
         if (currContinent->controlsContinent(currPlayer))
             bonusArmies += currContinent->bonusArmies;
     }
     currContinent = nullptr;
 
     // Player gets number of armies equal to their number of Territories / 3, unless this number is less than 3
-    if ((currPlayer->getTerritories().size() / 3) > MINIMUM_NUM_ARMIES)
-        bonusArmies = currPlayer->getTerritories().size() / 3;
+    if ((currPlayer->getTerritories().size() / 3) > reinforcement)
+        reinforcement = currPlayer->getTerritories().size() / 3;
 
-    cout << currPlayer->get_name() << " received " << MINIMUM_NUM_ARMIES << " new reinforcements "
+
+    currPlayer->setReinforcementPool(reinforcement + bonusArmies); // add armies
+
+    cout << currPlayer->get_name() << " received " << reinforcement << " new reinforcements "
          << "and " << bonusArmies << " bonus reinforcements." << endl;
-    currPlayer->setReinforcementPool(MINIMUM_NUM_ARMIES + bonusArmies); // add armies
+    cout << " In total the player has " << currPlayer->getReinforcementPool() << " armies in their reinforcement pool." << endl;
+
 }
 
 
