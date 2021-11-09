@@ -196,8 +196,8 @@ void Engine::mainGameLoop()
 
     }
 
-    cout << "########################################" << endl;
-    cout << "Congratulations, " << winner->get_name() << " You won!" << endl;
+    cout << "#############   END Game ###########################" << endl;
+    cout << "        Congratulations, " << winner->get_name() << " You won!" << endl;
     cout << "########################################" << endl;
 }
 
