@@ -110,6 +110,7 @@ void Engine::issueOrdersPhase(Player* currPlayer) {
     //if the player has armies in the pool, ask the player to deploy
     if (currPlayer->getReinforcementPool() !=0){
         cout<<"Deploy Order"<<endl;
+        currPlayer->toDefend();
         currPlayer->issueOrder("Deploy");
     }
     //if the player has card on hand, ask the player to play the card
