@@ -120,6 +120,8 @@ public:
 	std::vector<Card*>getCardsOnHand();
 	void remove(int n);//removed the cards from the Hand
 
+    friend ostream& operator << (ostream& out, const Hand& h);
+
 	//void prinList();
 };
 #endif // !Hand_HEADER

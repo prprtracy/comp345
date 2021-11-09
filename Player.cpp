@@ -90,7 +90,7 @@ vector<Territory*> Player::getTerritories()
 // return neighboring territories
 vector<Territory*> Player::toAttack()
 {
-    cout << "Territories to attack" << endl;
+    cout << "Territories to attack: " << endl;
     vector<Territory*> attackList;
     Territory* t = nullptr;
     for (int i = 0; i < this->territories.size(); i++) // for each of this Player's Territories
@@ -115,7 +115,7 @@ vector<Territory*> Player::toAttack()
 //return the list
 vector<Territory*> Player::toDefend()
 {
-    cout << "Territories to defend" << endl;
+    cout << "Territories to defend: " << endl;
 
     vector<Territory*> defendList;
     for (int i = 0; i < this->territories.size(); i++)

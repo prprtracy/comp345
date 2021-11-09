@@ -73,7 +73,7 @@ void Engine::reinforcementPhase(Player* currPlayer)
     cout << "\nConduct Reinforcement Phase" << endl;
 
     int bonusArmies = 0; // owning whole Continent bonus
-    int reinforcement =3; //the min of reinforcement armies is 3
+    int reinforcement =3; //the min/default of reinforcement armies are 3
 
     //check if the player owns the Continent
     Continent* currContinent = nullptr;
@@ -105,10 +105,34 @@ void Engine::reinforcementPhase(Player* currPlayer)
 void Engine::issueOrdersPhase(Player* currPlayer) {
 
     string o;
+
     cout<<"Issue Order Phase"<<endl;
-    cout<<"\nPlease enter your order: Deploy, Advance, Bomb, Blockade, Airlift, Negotiate"<<endl;
-    cin >> o;
+    //if the player has armies in the pool, ask the player to deploy
+    if (currPlayer->getReinforcementPool() !=0){
+        cout<<"Deploy Order"<<endl;
+        currPlayer->issueOrder("Deploy");
+    }
+    //if the player has card on hand, ask the player to play the card
+    if (currPlayer->getHandOfPlayer()->getCardsOnHand().size()!= 0){
+        cout<<"\nPlease play one of your cards: "<<endl;
+        for(int i=0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
+            cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+        }
+        cin >> o;
+        //if t
+        while(!count(currPlayer->getHandOfPlayer()->getCardsOnHand().begin(), currPlayer->getHandOfPlayer()->getCardsOnHand().end(), o))
+            cout<< "\nError! Please re-entre. You have cards: " <<endl;
+        for(int i=0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
+            cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+        }
+        cin >> o;
+    }
     currPlayer->issueOrder(o);
+    //everyone should have an advance order
+    cout<<"\nAdvance Order"<<endl;
+    currPlayer->toAttack();
+    currPlayer->toDefend();
+    currPlayer->issueOrder("Advance");
 }
 
 
