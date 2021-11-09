@@ -90,7 +90,7 @@ vector<Territory*> Player::getTerritories()
 // return neighboring territories
 vector<Territory*> Player::toAttack()
 {
-    cout << "The territories that are to attack" << endl;
+    cout << "Territories to attack" << endl;
     vector<Territory*> attackList;
     Territory* t = nullptr;
     for (int i = 0; i < this->territories.size(); i++) // for each of this Player's Territories
@@ -103,6 +103,7 @@ vector<Territory*> Player::toAttack()
                 if (!(t->allAdjTerritories.at(j)->haveTerritory(attackList))) // if Territory is not alredy in list
                 {
                     attackList.push_back(t->allAdjTerritories.at(j));
+                    cout<<territories.at(j)->get_name()<<endl;
                 }
             }
         }
@@ -114,11 +115,13 @@ vector<Territory*> Player::toAttack()
 //return the list
 vector<Territory*> Player::toDefend()
 {
-    cout << "The territories that are to defend" << endl;
+    cout << "Territories to defend" << endl;
+
     vector<Territory*> defendList;
     for (int i = 0; i < this->territories.size(); i++)
     {
         defendList.push_back(this->territories.at(i));
+        cout<<territories.at(i)->get_name()<<endl;
     }
 
     return defendList;
