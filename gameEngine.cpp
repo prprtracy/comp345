@@ -120,15 +120,18 @@ void Engine::issueOrdersPhase(Player* currPlayer) {
             cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
         }
         cin >> o;
-        //if t
-        while(!count(currPlayer->getHandOfPlayer()->getCardsOnHand().begin(), currPlayer->getHandOfPlayer()->getCardsOnHand().end(), o))
+        //using the while loop to make sure the user input a correct command
+        while(!count(currPlayer->getHandOfPlayer()->getCardsOnHand().begin(), currPlayer->getHandOfPlayer()->getCardsOnHand().end(), o)){
             cout<< "\nError! Please re-entre. You have cards: " <<endl;
-        for(int i=0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
-            cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+            for(int i=0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
+                cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+            }
+            cin >> o;
         }
-        cin >> o;
+
     }
-    currPlayer->issueOrder(o);
+    currPlayer->issueOrder(o);//call the issue order with the user's input
+
     //everyone should have an advance order
     cout<<"\nAdvance Order"<<endl;
     currPlayer->toAttack();
