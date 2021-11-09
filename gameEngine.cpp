@@ -156,15 +156,12 @@ void Engine::mainGameLoop()
     Player* winner = nullptr;
     while (winner == nullptr)
     {
-
         kickPlayers(); // check if a Player owns no Territories; if yes, kick them from the game
         winner = checkWinner(); // check if a Player has won the game
         if (winner != nullptr)
         {
             break;
         }
-
-
 
         // Reinforcement phase
         for (int i = 0; i < this->players.size(); i++)
@@ -198,14 +195,36 @@ void Engine::mainGameLoop()
         cout << endl;
 
     }
+
     cout << "########################################" << endl;
-    cout << "            Winner!!!" << endl;
+    cout << "Congratulations, " << winner->get_name() << " You won!" << endl;
     cout << "########################################" << endl;
-    cout << "Congratulations, Player " << winner->getPlayerNumber() << "! You won!" << endl;
-    cout << "Restart the program to play again." << endl;
 }
 
+void Engine::kickPlayers()
+{
+    Player* currPlayer = nullptr; // for readability
+    for (int i = 0; i < this->getPlayers().size(); i++)
+    {
+        currPlayer = this->players[i];
+        if (currPlayer->getTerritories().size() <= 0) // if Player has no Territories kick them from the game
+        {
+            cout << "Player " << currPlayer->getPlayerNumber() << " controls no more Territories. They are removed from the game." << endl;
 
+            // put the losing Player's Cards back in the Deck
+            Hand* hand = currPlayer->getHand(); // for readability
+            for (int j = 0; j < hand->getCardsInHand().size(); j++)
+            {
+                this->deck->insertBackToDeck(hand->getCardsInHand()[j]); // put each Card back in the Deck
+                hand->getCardsInHand()[j] = nullptr;
+            }
+            hand->getCardsInHand().clear(); // Player's Hand size is now 0
+            hand = nullptr;
+            currPlayer->eliminatePlayer(); // sets isEliminated to true
+        }
+    }
+    currPlayer = nullptr;
+}
 
 
 

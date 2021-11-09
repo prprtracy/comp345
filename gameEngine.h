@@ -89,8 +89,8 @@ public:
     void executeOrdersPhase(Player* currPlayer);
 
     vector<Player*> getPlayers();
-
-
+    void kickPlayers(); // checks if a Player has lost the game
+    Player* checkWinner(); // checks if a Player has won
 	void end() {
 		exit(0);
 	}
