@@ -28,8 +28,13 @@ public:
 	Player& operator = (const Player& player);
 	//distructor
 	~Player();
-	void toAttack();
-	void toDeffend();
+
+
+    vector<Territory*> toDefend();
+    vector<Territory*> toAttack();
+
+
+
 	void issueOrder(string);
 
     //void issueOrder() {return this->playerStrategy->issueOrder();};

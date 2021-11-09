@@ -445,4 +445,15 @@ void Map::printConnectedTerritory(Territory* territory)
     }
 }
 
-
+bool Territory::haveTerritory(vector<Territory*> territories)
+{
+    if (territories.size() != 0)
+    {
+        for (int i = 0; i < territories.size(); i++)
+        {
+            if (territories.at(i) == this)
+                return true;
+        }
+    }
+    return false;
+}

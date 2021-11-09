@@ -109,7 +109,6 @@ void Engine::issueOrdersPhase(Player* currPlayer) {
     cout<<"\nPlease enter your order: Deploy, Advance, Bomb, Blockade, Airlift, Negotiate"<<endl;
     cin >> o;
     currPlayer->issueOrder(o);
-
 }
 
 

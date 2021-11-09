@@ -29,13 +29,6 @@ Player::~Player() {
 	delete this->orderList;
 }
 
-void Player::toAttack() {
-	cout << "This is the attack method. " << endl;
-}
-void Player::toDeffend() {
-	cout << "This is the deffend method. " << endl;
-}
-
 void Player::issueOrder(string order) {
 	if (order == "Deploy") {
 		Deploy* d = new Deploy();
@@ -92,5 +85,42 @@ vector<Territory*> Player::getTerritories()
     vector<Territory*> t = this->territories;
 
     return t;
+}
+
+// return neighboring territories
+vector<Territory*> Player::toAttack()
+{
+    cout << "The territories that are to attack" << endl;
+    vector<Territory*> attackList;
+    Territory* t = nullptr;
+    for (int i = 0; i < this->territories.size(); i++) // for each of this Player's Territories
+    {
+        t = this->territories.at(i);
+        for (int j = 0; j < t->allAdjTerritories.size(); j++) // for each of that Territories asjacent Territories
+        {
+            if (t->allAdjTerritories.at(j)->getOwner() != this) // if this Player does not own that Territory
+            {
+                if (!(t->allAdjTerritories.at(j)->haveTerritory(attackList))) // if Territory is not alredy in list
+                {
+                    attackList.push_back(t->allAdjTerritories.at(j));
+                }
+            }
+        }
+    }
+
+    return attackList;
+}
+
+//return the list
+vector<Territory*> Player::toDefend()
+{
+    cout << "The territories that are to defend" << endl;
+    vector<Territory*> defendList;
+    for (int i = 0; i < this->territories.size(); i++)
+    {
+        defendList.push_back(this->territories.at(i));
+    }
+
+    return defendList;
 }
 
