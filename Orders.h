@@ -165,7 +165,6 @@ public:
 	Orders* pop(); //get the first order of the list, then execute this order. once the order executed, it will remove from the list
 	void print_ol();
 
-private:
-	vector<Orders*> order_list;
+    vector<Orders*> order_list;
 };
 

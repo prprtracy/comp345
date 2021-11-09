@@ -105,7 +105,6 @@ void Engine::reinforcementPhase(Player* currPlayer)
 void Engine::issueOrdersPhase(Player* currPlayer) {
 
     string o;
-
     cout<<"Issue Order Phase"<<endl;
     //if the player has armies in the pool, ask the player to deploy
     if (currPlayer->getReinforcementPool() !=0){
@@ -138,6 +137,16 @@ void Engine::issueOrdersPhase(Player* currPlayer) {
     currPlayer->toDefend();
     currPlayer->issueOrder("Advance");
 }
+
+void Engine::executeOrdersPhase(Player* currPlayer)
+{
+    // execute deploy orders
+    while(currPlayer->get_orderList()->order_list.size() != 0) {
+        currPlayer->get_orderList()->pop();
+    }
+}
+
+
 
 
 
