@@ -82,7 +82,7 @@ public:
 	void win();
 
 
-    //set the phases
+    //set the main loop and phases
     void mainGameLoop();
     void reinforcementPhase(Player* currPlayer); // void for now
     void issueOrdersPhase(Player* currPlayer);

@@ -149,6 +149,66 @@ void Engine::executeOrdersPhase(Player* currPlayer)
 
 
 
+// Loops through 3 phases
+void Engine::mainGameLoop()
+{
+
+    Player* winner = nullptr;
+    while (winner == nullptr)
+    {
+
+        kickPlayers(); // check if a Player owns no Territories; if yes, kick them from the game
+        winner = checkWinner(); // check if a Player has won the game
+        if (winner != nullptr)
+        {
+            break;
+        }
+
+
+
+        // Reinforcement phase
+        for (int i = 0; i < this->players.size(); i++)
+        {
+            if (!this->players.at(i)->isEliminated())
+            {
+                reinforcementPhase(players.at(i));
+            }
+        }
+        cout << endl;
+
+        // Issuing Orders phase
+        for (int i = 0; i < this->players.size(); i++)
+        {
+            cout << *this->players.at(i) << endl;
+            if (!this->players.at(i)->isEliminated())
+            {
+                issueOrdersPhase(this->players.at(i));
+            }
+        }
+        cout << endl;
+
+        // Orders execution phase
+        for (int i = 0; i < this->players.size(); i++)
+        {
+            if (!this->players.at(i)->isEliminated())
+            {
+                executeOrdersPhase(players.at(i));
+            }
+        }
+        cout << endl;
+
+    }
+    cout << "########################################" << endl;
+    cout << "            Winner!!!" << endl;
+    cout << "########################################" << endl;
+    cout << "Congratulations, Player " << winner->getPlayerNumber() << "! You won!" << endl;
+    cout << "Restart the program to play again." << endl;
+}
+
+
+
+
+
 
 
 
