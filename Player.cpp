@@ -127,3 +127,13 @@ vector<Territory*> Player::toDefend()
     return defendList;
 }
 
+bool Player::isLost()
+{
+    return this->eliminated;
+}
+
+// Sets this Player's eliminated data member to true.
+void Player::setLostPlayer()
+{
+    this->eliminated = true;
+}

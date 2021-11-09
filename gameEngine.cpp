@@ -68,6 +68,7 @@ void Engine::endExeOrder() {
 	//Cases close and ruin constructors
 }
 
+//==================================Reinforcement Phase==============================
 void Engine::reinforcementPhase(Player* currPlayer)
 {
     cout << "\nConduct Reinforcement Phase" << endl;
@@ -101,6 +102,7 @@ void Engine::reinforcementPhase(Player* currPlayer)
 
 }
 
+//==================================Issuing Orders Phase==============================
 // Calls the issueOrder method of the player's strategy class
 void Engine::issueOrdersPhase(Player* currPlayer) {
 
@@ -138,6 +140,7 @@ void Engine::issueOrdersPhase(Player* currPlayer) {
     currPlayer->issueOrder("Advance");
 }
 
+//==================================Orders Execution Phase==============================
 void Engine::executeOrdersPhase(Player* currPlayer)
 {
     // execute deploy orders
@@ -147,8 +150,7 @@ void Engine::executeOrdersPhase(Player* currPlayer)
 }
 
 
-
-
+//==================================Main Game Loop==============================
 // Loops through 3 phases
 void Engine::mainGameLoop()
 {
@@ -156,38 +158,38 @@ void Engine::mainGameLoop()
     Player* winner = nullptr;
     while (winner == nullptr)
     {
-        kickPlayers(); // check if a Player owns no Territories; if yes, kick them from the game
-        winner = checkWinner(); // check if a Player has won the game
+        removePlayers(); // remove players that have no territory
+        winner = checkWinner(); // check if there is a winner
         if (winner != nullptr)
         {
             break;
         }
 
-        // Reinforcement phase
+        // ===============Reinforcement phase========
         for (int i = 0; i < this->players.size(); i++)
         {
-            if (!this->players.at(i)->isEliminated())
+            if (!this->players.at(i)->isLost())
             {
                 reinforcementPhase(players.at(i));
             }
         }
         cout << endl;
 
-        // Issuing Orders phase
+        // ============Issuing Orders phase============
         for (int i = 0; i < this->players.size(); i++)
         {
-            cout << *this->players.at(i) << endl;
-            if (!this->players.at(i)->isEliminated())
+            cout << this->players.at(i)->get_name() << endl;
+            if (!this->players.at(i)->isLost())
             {
                 issueOrdersPhase(this->players.at(i));
             }
         }
         cout << endl;
 
-        // Orders execution phase
+        //=========== Orders execution phase=================
         for (int i = 0; i < this->players.size(); i++)
         {
-            if (!this->players.at(i)->isEliminated())
+            if (!this->players.at(i)->isLost())
             {
                 executeOrdersPhase(players.at(i));
             }
@@ -196,37 +198,58 @@ void Engine::mainGameLoop()
 
     }
 
-    cout << "#############   END Game ###########################" << endl;
+    cout << "#############   END Game  ###########################" << endl;
     cout << "        Congratulations, " << winner->get_name() << " You won!" << endl;
     cout << "########################################" << endl;
 }
 
-void Engine::kickPlayers()
+//method to remove the player that does not have any country
+void Engine::removePlayers()
 {
-    Player* currPlayer = nullptr; // for readability
+    Player* currPlayer = nullptr;
     for (int i = 0; i < this->getPlayers().size(); i++)
     {
         currPlayer = this->players[i];
-        if (currPlayer->getTerritories().size() <= 0) // if Player has no Territories kick them from the game
+        // check if a player has no territory and will be removed
+        if (currPlayer->getTerritories().size() <= 0)
         {
-            cout << "Player " << currPlayer->getPlayerNumber() << " controls no more Territories. They are removed from the game." << endl;
+            cout <<  currPlayer->get_name() << " has lost the game :(" << endl;
 
-            // put the losing Player's Cards back in the Deck
-            Hand* hand = currPlayer->getHand(); // for readability
-            for (int j = 0; j < hand->getCardsInHand().size(); j++)
+            // the players should put back their cards
+            Hand* hand = currPlayer->getHandOfPlayer();
+            for (int j = 0; j < hand->getCardsOnHand().size(); j++)
             {
-                this->deck->insertBackToDeck(hand->getCardsInHand()[j]); // put each Card back in the Deck
-                hand->getCardsInHand()[j] = nullptr;
+                this->deck->insert(hand->getCardsOnHand()[j]); // put Cards back to the deck
+                hand->getCardsOnHand()[j] = nullptr;
             }
-            hand->getCardsInHand().clear(); // Player's Hand size is now 0
+            hand->getCardsOnHand().clear(); // Player's Hand size is now 0
             hand = nullptr;
-            currPlayer->eliminatePlayer(); // sets isEliminated to true
+            currPlayer->setLostPlayer(); // set the player is lost the game
         }
     }
     currPlayer = nullptr;
 }
 
+// Checks if a Player has won the game; if so return that winning Player, else return nullptr
+// a Player has won if they conrol all the Territories on the Map
+Player* Engine::checkWinner()
+{
+    int playersNum = 0; // number of players still in the game
+    Player* winner = nullptr;
+    for (int i = 0; i < this->getPlayers().size(); i++)
+    {
+        if (!this->getPlayers().at(i)->isLost())
+        {
+            playersNum++;
+            winner = this->getPlayers().at(i);
+        }
+    }
 
+    if (playersNum == 1) {
+        return winner;
+    }
+    return nullptr;
+}
 
 
 

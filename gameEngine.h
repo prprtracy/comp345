@@ -30,8 +30,8 @@ private:
 	Orders* orders;
 	Deck* deck;
 	int playersNum;
-
     Map* map;
+    vector<Player*> players;
 
 public:
 	Engine();
@@ -89,7 +89,7 @@ public:
     void executeOrdersPhase(Player* currPlayer);
 
     vector<Player*> getPlayers();
-    void kickPlayers(); // checks if a Player has lost the game
+    void removePlayers(); // checks if a Player has lost the game
     Player* checkWinner(); // checks if a Player has won
 	void end() {
 		exit(0);

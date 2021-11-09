@@ -17,6 +17,7 @@ private:
 	OrderList* orderList;
 	string name;
 	Hand* hand;
+    bool eliminated; // will store whether the Player has been eliminated from the game or not
     int reinforcementPool;
 
 public:
@@ -59,6 +60,9 @@ public:
     // Getter and setter for reinforcementPool
     int getReinforcementPool() { return reinforcementPool; };
     void setReinforcementPool(int a) { reinforcementPool = a; };
+
+    void setLostPlayer(); // sets the Player's eliminated data member to true
+    bool isLost(); // return whether the Player is eliminated or not
 
 
 };
