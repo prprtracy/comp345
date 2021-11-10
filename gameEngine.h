@@ -86,7 +86,7 @@ public:
     void mainGameLoop();
     void reinforcementPhase(Player* currPlayer); // void for now
     void issueOrdersPhase(Player* currPlayer);
-    void executeOrdersPhase(Player* currPlayer);
+    void executeOrdersPhase(Player* thisPlayer);
 
     vector<Player*> getPlayers();
     void removePlayers(); // checks if a Player has lost the game

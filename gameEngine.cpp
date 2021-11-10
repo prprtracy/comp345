@@ -141,11 +141,11 @@ void Engine::issueOrdersPhase(Player* currPlayer) {
 }
 
 //==================================Orders Execution Phase==============================
-void Engine::executeOrdersPhase(Player* currPlayer)
+void Engine::executeOrdersPhase(Player* thisPlayer)
 {
     // execute deploy orders
-    while(currPlayer->get_orderList()->order_list.size() != 0) {
-        currPlayer->get_orderList()->pop();
+    while(thisPlayer->get_orderList()->order_list.size() != 0) {
+        thisPlayer->get_orderList()->pop();
     }
 }
 
@@ -206,17 +206,17 @@ void Engine::mainGameLoop()
 //method to remove the player that does not have any country
 void Engine::removePlayers()
 {
-    Player* currPlayer = nullptr;
+    Player* thisPlayer = nullptr;
     for (int i = 0; i < this->getPlayers().size(); i++)
     {
-        currPlayer = this->players[i];
+        thisPlayer = this->players[i];
         // check if a player has no territory and will be removed
-        if (currPlayer->getTerritories().size() <= 0)
+        if (thisPlayer->getTerritories().size() <= 0)
         {
-            cout <<  currPlayer->get_name() << " has lost the game :(" << endl;
+            cout << thisPlayer->get_name() << " has lost the game :(" << endl;
 
             // the players should put back their cards
-            Hand* hand = currPlayer->getHandOfPlayer();
+            Hand* hand = thisPlayer->getHandOfPlayer();
             for (int j = 0; j < hand->getCardsOnHand().size(); j++)
             {
                 this->deck->insert(hand->getCardsOnHand()[j]); // put Cards back to the deck
@@ -224,10 +224,10 @@ void Engine::removePlayers()
             }
             hand->getCardsOnHand().clear(); // Player's Hand size is now 0
             hand = nullptr;
-            currPlayer->setLostPlayer(); // set the player is lost the game
+            thisPlayer->setLostPlayer(); // set the player is lost the game
         }
     }
-    currPlayer = nullptr;
+    thisPlayer = nullptr;
 }
 
 // Checks if a Player has won the game; if so return that winning Player, else return nullptr
