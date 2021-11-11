@@ -21,4 +21,4 @@ add_executable(comp345
         OrdersDriver.cpp
         Player.cpp
         Player.h
-        PlayerDriver.cpp)
+        PlayerDriver.cpp Part3Driver.cpp)
