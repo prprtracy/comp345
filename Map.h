@@ -40,6 +40,8 @@ public:
     int get_armies() const;
     Player* getOwner();
     void setOwner(Player* player);// set the owner of this Territory
+    bool addArmies(int n);
+    bool removeArmies(int n);
     bool haveTerritory(vector<Territory*> territories); // checks if this Territory is contained in the input vector
 
     friend bool operator ==(const Territory& t1, const Territory& t2);

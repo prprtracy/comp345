@@ -457,3 +457,23 @@ bool Territory::haveTerritory(vector<Territory*> territories)
     }
     return false;
 }
+
+bool Territory::addArmies(int n)
+{
+    if (n > 0)
+    {
+        armyNum += n;
+        return true;
+    }
+    return false;
+}
+
+bool Territory::removeArmies(int n)
+{
+    if (n > 0)
+    {
+        armyNum -= n;
+        return true;
+    }
+    return false;
+}
