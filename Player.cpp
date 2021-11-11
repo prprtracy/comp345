@@ -137,3 +137,4 @@ void Player::setLostPlayer()
 {
     this->eliminated = true;
 }
+

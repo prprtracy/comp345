@@ -35,7 +35,7 @@ private:
 
 public:
 	Engine();
-	
+
 	//States to define
 	string stateToString() {
 		switch (step) {
