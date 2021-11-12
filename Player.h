@@ -51,6 +51,8 @@ public:
 	//get the hand cards of the player
 	Hand* getHandOfPlayer();
 
+    // add territories
+    void addTerritory(Territory* r);
     // territories belonging to the player
     std::vector<Territory*> territories;
     //get all territories belong to the player

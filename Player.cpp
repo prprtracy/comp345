@@ -27,6 +27,8 @@ Player& Player::operator=(const Player& player) {
 Player::~Player() {
 	this->name.clear();
 	delete this->orderList;
+
+
 }
 
 void Player::issueOrder(string order) {
@@ -79,6 +81,12 @@ Hand* Player::getHandOfPlayer() {
 
 void Player::setCardsOnHand(Hand* hand) {
 	this->hand = hand;
+}
+
+void Player::addTerritory(Territory* t)
+{
+    this->territories.push_back(t);
+    t->setOwner(this);
 }
 
 vector<Territory*> Player::getTerritories()
