@@ -31,6 +31,7 @@ private:
 	Deck* deck;
 	int playersNum;
     Map* map;
+
     vector<Player*> players;
 
 public:
@@ -68,6 +69,14 @@ public:
 		step = nextStep;
 	}
 
+    void setNbrOfPlayers();
+
+
+    //getters
+    int getNbrOfPlayers();
+    Map* getMap();
+
+    vector<Player*> getPlayers();
 
 	// all the states method
 	void readMap();
@@ -82,13 +91,12 @@ public:
 	void win();
 
 
+
     //set the main loop and phases
     void mainGameLoop();
     void reinforcementPhase(Player* currPlayer); // void for now
     void issueOrdersPhase(Player* currPlayer);
     void executeOrdersPhase(Player* thisPlayer);
-
-    vector<Player*> getPlayers();
     void removePlayers(); // checks if a Player has lost the game
     Player* checkWinner(); // checks if a Player has won
 	void end() {

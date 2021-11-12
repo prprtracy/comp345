@@ -198,9 +198,8 @@ void Engine::mainGameLoop()
 
     }
 
-    cout << "#############   END Game  ###########################" << endl;
+    cout << "==========   END Game =======" << endl;
     cout << "        Congratulations, " << winner->get_name() << " You won!" << endl;
-    cout << "########################################" << endl;
 }
 
 //method to remove the player that does not have any country
@@ -252,10 +251,33 @@ Player* Engine::checkWinner()
 }
 
 
-
-
-
-
+void Engine::setNbrOfPlayers()
+{
+    int nbrOfplayers;
+    while (true)
+    {
+        cout << "Please enter the number of players: ";
+        cin >> nbrOfplayers;
+        if (nbrOfplayers < 2 || nbrOfplayers > 5)
+        {
+            cout << "Invalid number. Please try again." << endl;;
+            continue;
+        }
+        else
+        {
+            break;
+        }
+    }
+    playersNum = nbrOfplayers;
+}
+int Engine::getNbrOfPlayers()
+{
+    return playersNum;
+}
+Map* Engine::getMap()
+{
+    return map;
+}
 
 
 
