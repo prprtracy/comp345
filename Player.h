@@ -17,6 +17,7 @@ private:
 	OrderList* orderList;
 	string name;
 	Hand* hand;
+    int playerNumber;
     bool eliminated; // will store whether the Player has been eliminated from the game or not
     int reinforcementPool;
 

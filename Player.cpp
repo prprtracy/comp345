@@ -4,8 +4,15 @@
 using namespace std;
 
 Player::Player() {
-	this->name = "aPlayer";
-	this->orderList = new OrderList();
+    this->name = "aPlayer";
+    this->orderList = new OrderList();
+    this->playerNumber =0;
+    this->hand = new Hand(this);
+    this->orderList = new OrderList();
+    this->reinforcementPool = 0;
+    this->eliminated = false;
+    vector<Territory*> terr;
+    this->territories = terr;
 }
 
 Player::Player(string str) {
@@ -14,8 +21,13 @@ Player::Player(string str) {
 }
 
 Player::Player(const Player& player) {
-	this->name = player.name;
-	this->orderList = player.orderList;
+    this->name = player.name;
+    this->orderList = player.orderList;
+    this->hand = player.hand;
+    this->orderList = player.orderList;
+    this->territories = player.territories;
+    this->eliminated = player.eliminated;
+    this->reinforcementPool = player.reinforcementPool;
 }
 
 Player& Player::operator=(const Player& player) {
@@ -28,6 +40,28 @@ Player::~Player() {
 	this->name.clear();
 	delete this->orderList;
 
+
+    // if the Player is not eliminated when the game is over their Hand has not already been cleared
+    if (!this->eliminated)
+    {
+        // clear the Player's Hand
+        Hand* hand = this->getHandOfPlayer(); // for readability
+        for (int i = 0; i < this->hand->getCardsOnHand().size(); i++)
+        {
+            delete hand->getCardsOnHand()[i];
+            hand->getCardsOnHand()[i] = nullptr;
+        }
+        hand->getCardsOnHand().clear(); // Player's Hand size is now 0
+        hand = nullptr;
+
+        delete this->hand; // delete Player's Hand pointer
+    }
+
+    for (int i = 0; i < this->territories.size(); i++)
+    {
+        this->territories[i] = nullptr; // avoid dangling pointers
+    }
+    this->territories.clear(); // remove placeholder memory locations
 
 }
 
