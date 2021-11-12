@@ -12,7 +12,7 @@ using namespace std;
 //	Orders* o = new Orders();
 //	Deploy* d = new Deploy();
 //	Advance* ad = new Advance();
-//	Bomb* bo = new Bomb();
+//	BombO* bo = new BombO();
 //	Blockade* bl = new Blockade();
 //	Airlift* ai = new Airlift();
 //	Negotiate* n = new Negotiate();

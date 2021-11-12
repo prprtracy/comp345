@@ -428,6 +428,15 @@ Player* Territory::getOwner()
 	return this->owner;
 }
 
+bool Territory::isAdjacent(int terr_id) {
+	for (int i = 0; i < allAdjTerritories.size(); i++) {
+		if (allAdjTerritories.at(i)->_id == terr_id) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /*
 * connect two neighbour territories
 */

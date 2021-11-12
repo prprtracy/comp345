@@ -6,43 +6,36 @@ using namespace std;
 Orders::Orders()
 {
     order_type = "anOrder";
+    this->own_player = nullptr;
 }
 
 Orders::~Orders()
 {
 }
 
-Orders::Orders(string str)
+Orders::Orders(Player* player, string str)
 {
+    this->own_player = player;
     order_type = str;
 }
 
 Orders::Orders(const Orders& order) {
+    this->own_player = order.own_player;
     this->order_type = order.order_type;
 }
 
 Orders& Orders::operator=(const Orders& order) {
+    this->own_player = order.own_player;
     this->order_type = order.order_type;
     return *this;
 }
 
-//the following two method leave for implementing in a2
-bool Orders::validate() {
-    cout << "This is the validate method for verify if the order is valid." << endl;
-    return false;
-}
-
-void Orders::execute() {
-    if (validate()) {
-        cout << "This order is valid and prepare to execute." << endl;
-    }
-    else {
-        cout << "Sorry, this is an invalid order..." << endl;
-    }
-}
-
 string Orders::get_order() {
     return this->order_type;
+}
+
+Player* Orders::get_player() {
+    return this->own_player;
 }
 
 ostream& operator<<(ostream& os, const Orders& order) {
@@ -55,13 +48,24 @@ Deploy::Deploy()
     order_type = "Deploy";
 }
 
+Deploy::Deploy(Player* player, Territory* territory, int num_armies)
+{
+    order_type = "Deploy";
+    this->territory = territory;
+    this->num_armies = num_armies;
+}
+
 Deploy::Deploy(const Deploy& deploy) {
 
     this->order_type = deploy.order_type;
+    this->territory = deploy.territory;
+    this->num_armies = deploy.num_armies;
 }
 
 Deploy& Deploy::operator=(const Deploy& deploy) {
     this->order_type = deploy.order_type;
+    this->territory = deploy.territory;
+    this->num_armies = deploy.num_armies;
     return *this;
 }
 
@@ -70,16 +74,22 @@ Deploy::~Deploy()
 }
 
 bool Deploy::validate() {
-    cout << "This is the validate method for verify the deploy order." << endl;
-    return true;
+    if (territory->getOwner() == get_player()) {
+        cout << "This deploy order is valid." << endl;
+        return true;
+    }
+    cout << "Invalid deploy order." << endl;
+    return false;
 }
 
 void Deploy::execute() {
     if (validate()) {
         cout << "This deploy order is valid and prepare to execute." << endl;
+        this->own_player->decreaseReinforcementPool(num_armies);
+        this->territory->addArmies(num_armies);
     }
     else {
-        cout << "Sorry, this is an invalid order...(D)" << endl;
+        cout << "Error: deploy execute method cannot execute." << endl;
     }
 }
 
@@ -97,13 +107,25 @@ Advance::Advance()
     order_type = "Advance";
 }
 
+Advance::Advance(Player* player, Territory* source, Territory* target, int armies) {
+    order_type = "Advance";
+    this->source_terr = source;
+    this->adjacent_terr = target;
+    this->num_armies = armies;
+}
 
 Advance::Advance(const Advance& advance) {
     this->order_type = advance.order_type;
+    this->source_terr = advance.source_terr;
+    this->adjacent_terr = advance.adjacent_terr;
+    this->num_armies = advance.num_armies;
 }
 
 Advance& Advance::operator=(const Advance& advance) {
     this->order_type = advance.order_type;
+    this->source_terr = advance.source_terr;
+    this->adjacent_terr = advance.adjacent_terr;
+    this->num_armies = advance.num_armies;
     return *this;
 }
 
@@ -112,16 +134,29 @@ Advance::~Advance()
 }
 
 bool Advance::validate() {
-    cout << "This is the validate method for verify the Advance order." << endl;
-    return true;
+    if (source_terr->getOwner() == own_player && source_terr->isAdjacent(adjacent_terr->_id)) {
+        cout << "This advance order is valid." << endl;
+        return true;
+    }
+    cout << "Invalid advance order." << endl;
+    return false;
 }
 
 void Advance::execute() {
     if (validate()) {
         cout << "This Advance order is valid and prepare to execute." << endl;
+        if (source_terr->getOwner() == own_player && adjacent_terr->getOwner() == own_player) {
+            source_terr->removeArmies(num_armies);
+            adjacent_terr->addArmies(num_armies);
+        }
+        else {
+            if (adjacent_terr->armyNum > 0) {
+
+            }
+        }
     }
     else {
-        cout << "Sorry, this is an invalid order...(A)" << endl;
+        cout << "Error: this advance method cannot execute." << endl;
     }
 }
 
@@ -139,13 +174,19 @@ BombO::BombO()
     order_type = "Bomb";
 }
 
+BombO::BombO(Player* player, Territory* territory) {
+    order_type = "Bomb";
+    this->target = territory;
+}
 
 BombO::BombO(const BombO& bomb) {
     this->order_type = bomb.order_type;
+    this->target = bomb.target;
 }
 
 BombO& BombO::operator=(const BombO& bomb) {
     this->order_type = bomb.order_type;
+    this->target = bomb.target;
     return *this;
 }
 
@@ -154,16 +195,29 @@ BombO::~BombO()
 }
 
 bool BombO::validate() {
-    cout << "This is the validate method for verify the Bomb order." << endl;
-    return true;
+    bool checkAdjacent = false;
+    for (int i = 0; i < own_player->getTerritories().size(); i++) {
+        if (own_player->getTerritories().at(i)->isAdjacent(target->_id)) {
+            checkAdjacent = true;
+        }
+    }
+    if (target->getOwner() != own_player && checkAdjacent) {
+        cout << "This bomb order is valid." << endl;
+        return true;
+    }
+    else {
+        cout << "Invalid bomb order." << endl;
+        return false;
+    }
 }
 
 void BombO::execute() {
     if (validate()) {
         cout << "This Bomb order is valid and prepare to execute." << endl;
+        target->removeArmies(target->armyNum / 2);
     }
     else {
-        cout << "Sorry, this is an invalid order...(B)" << endl;
+        cout << "Error: this bomb order cannot execute." << endl;
     }
 }
 
@@ -181,13 +235,19 @@ Blockade::Blockade()
     order_type = "Blockade";
 }
 
+Blockade::Blockade(Player* player, Territory* target) {
+    order_type = "Blockade";
+    this->territory = target;
+}
 
 Blockade::Blockade(const Blockade& blockade) {
     this->order_type = blockade.order_type;
+    this->territory = blockade.territory;
 }
 
 Blockade& Blockade::operator=(const Blockade& blockade) {
     this->order_type = blockade.order_type;
+    this->territory = blockade.territory;
     return *this;
 }
 
@@ -196,16 +256,22 @@ Blockade::~Blockade()
 }
 
 bool Blockade::validate() {
-    cout << "This is the validate method for verify the Blockade order." << endl;
-    return true;
+    if (territory->getOwner() == own_player) {
+        cout << "This blockade order is valid." << endl;
+        return true;
+    }
+    cout << "Invalid blockade order." << endl;
+    return false;
 }
 
 void Blockade::execute() {
     if (validate()) {
         cout << "This Blockade order is valid and prepare to execute." << endl;
+        territory->addArmies(territory->armyNum);
+        territory->setOwner(new Player());
     }
     else {
-        cout << "Sorry, this is an invalid order...(BL)" << endl;
+        cout << "Error: this blockade method cannot execute." << endl;
     }
 }
 
@@ -223,12 +289,25 @@ Airlift::Airlift()
     order_type = "Airlift";
 }
 
+Airlift::Airlift(Player* player, Territory* source, Territory* target, int armies) {
+    order_type = "Airlift";
+    this->source_terr = source;
+    this->target_terr = target;
+    this->num_armies = armies;
+}
+
 Airlift::Airlift(const Airlift& airlift) {
     this->order_type = airlift.order_type;
+    this->source_terr = airlift.source_terr;
+    this->target_terr = airlift.target_terr;
+    this->num_armies = airlift.num_armies;
 }
 
 Airlift& Airlift::operator=(const Airlift& airlift) {
     this->order_type = airlift.order_type;
+    this->source_terr = airlift.source_terr;
+    this->target_terr = airlift.target_terr;
+    this->num_armies = airlift.num_armies;
     return *this;
 }
 
@@ -237,16 +316,22 @@ Airlift::~Airlift()
 }
 
 bool Airlift::validate() {
-    cout << "This is the validate method for verify the Airlift order." << endl;
-    return true;
+    if (source_terr->getOwner() == own_player && target_terr->getOwner() == own_player) {
+        cout << "This airlift order is valid." << endl;
+        return true;
+    }
+    cout << "Invalid airlift order." << endl;
+    return false;
 }
 
 void Airlift::execute() {
     if (validate()) {
         cout << "This Airlift order is valid and prepare to execute." << endl;
+        source_terr->removeArmies(num_armies);
+        target_terr->addArmies(num_armies);
     }
     else {
-        cout << "Sorry, this is an invalid order...(AI)" << endl;
+        cout << "Error: This airlift order cannot execute." << endl;
     }
 }
 
@@ -264,12 +349,19 @@ Negotiate::Negotiate()
     order_type = "Negotiate";
 }
 
+Negotiate::Negotiate(Player* player1, Player* player2) {
+    order_type = "Negotiate";
+    this->target_player = player2;
+}
+
 Negotiate::Negotiate(const Negotiate& negotiate) {
     this->order_type = negotiate.order_type;
+    this->target_player = negotiate.target_player;
 }
 
 Negotiate& Negotiate::operator=(const Negotiate& Negotiate) {
     this->order_type = Negotiate.order_type;
+    this->target_player = Negotiate.target_player;
     return *this;
 }
 
@@ -278,8 +370,12 @@ Negotiate::~Negotiate()
 }
 
 bool Negotiate::validate() {
-    cout << "This is the validate method for verify the Negotiate order." << endl;
-    return true;
+    if (own_player != target_player) {
+        cout << "This negotiate order is valid." << endl;
+        return true;
+    }
+    cout << "Invalid negotiate order." << endl;
+    return false;
 }
 
 void Negotiate::execute() {
@@ -287,7 +383,7 @@ void Negotiate::execute() {
         cout << "This Negotiate order is valid and prepare to execute." << endl;
     }
     else {
-        cout << "Sorry, this is an invalid order...(N)" << endl;
+        cout << "Error: This negotiate order cannot execute." << endl;
     }
 }
 

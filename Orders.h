@@ -1,13 +1,18 @@
 #pragma once
 /*
 * @author: Qichen Liu (40055916)
-* @date: 2021/10/08
-* @version: 1.0 (part 3)
+* @date: 2021/11/11
+* @version: 2.0 (part 4)
 */
 #include <string>
 #include <vector>
+#include "Player.h"
+#include "Map.h"
 
 using namespace std;
+
+class Territory;
+class Player;
 
 class Orders
 {
@@ -22,17 +27,20 @@ public:
 	*/
 	Orders();
 	~Orders();
-	Orders(string);
+	Orders(Player*, string);
 	Orders(const Orders& order);
 	Orders& operator = (const Orders& order);
 	/*
-	* define the validate, execute as virtual function,
+	* define the validate, execute as pure virtual method,
 	* in order to allowed the subclass of Order can overwirte the functions which have the same function name
 	*/
-	virtual bool validate();
-	virtual void execute();
+	virtual bool validate() = 0;
+	virtual void execute() = 0;
 	friend ostream& operator<<(ostream& os, const Orders& orders);
 	virtual string get_order();
+	Player* get_player();
+protected:
+	Player* own_player;
 private:
 	string order_type;
 };
@@ -42,6 +50,7 @@ class Deploy : public Orders
 public:
 	Deploy();
 	~Deploy();
+	Deploy(Player*, Territory*, int);
 	Deploy(const Deploy& deploy);
 	Deploy& operator = (const Deploy& deploy);
 	/*
@@ -54,6 +63,8 @@ public:
 
 private:
 	string order_type;
+	Territory* territory;
+	int num_armies;
 };
 
 class Advance : public Orders
@@ -61,6 +72,7 @@ class Advance : public Orders
 public:
 	Advance();
 	~Advance();
+	Advance(Player*, Territory*, Territory*, int);
 	Advance(const Advance& advance);
 	Advance& operator = (const Advance& advance);
 	/*
@@ -73,6 +85,9 @@ public:
 
 private:
 	string order_type;
+	Territory* source_terr;
+	Territory* adjacent_terr;
+	int num_armies;
 };
 
 class BombO : public Orders
@@ -80,6 +95,7 @@ class BombO : public Orders
 public:
 	BombO();
 	~BombO();
+	BombO(Player*, Territory*);
 	BombO(const BombO& bomb);
 	BombO& operator = (const BombO& bomb);
 	/*
@@ -92,6 +108,7 @@ public:
 
 private:
 	string order_type;
+	Territory* target;
 };
 
 class Blockade : public Orders
@@ -99,6 +116,7 @@ class Blockade : public Orders
 public:
 	Blockade();
 	~Blockade();
+	Blockade(Player*, Territory*);
 	Blockade(const Blockade& blockade);
 	Blockade& operator = (const Blockade& blockade);
 	/*
@@ -111,6 +129,7 @@ public:
 
 private:
 	string order_type;
+	Territory* territory;
 };
 
 class Airlift : public Orders
@@ -118,6 +137,7 @@ class Airlift : public Orders
 public:
 	Airlift();
 	~Airlift();
+	Airlift(Player*, Territory*, Territory*, int);
 	Airlift(const Airlift& airlift);
 	Airlift& operator = (const Airlift& airlift);
 	/*
@@ -130,6 +150,9 @@ public:
 
 private:
 	string order_type;
+	Territory* source_terr;
+	Territory* target_terr;
+	int num_armies;
 };
 
 class Negotiate : public Orders
@@ -137,6 +160,7 @@ class Negotiate : public Orders
 public:
 	Negotiate();
 	~Negotiate();
+	Negotiate(Player*, Player*);
 	Negotiate(const Negotiate& negotiate);
 	Negotiate& operator = (const Negotiate& negotiate);
 	/*
@@ -149,6 +173,7 @@ public:
 
 private:
 	string order_type;
+	Player* target_player;
 };
 
 class OrderList

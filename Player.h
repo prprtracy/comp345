@@ -61,6 +61,10 @@ public:
     int getReinforcementPool() { return reinforcementPool; };
     void setReinforcementPool(int a) { reinforcementPool = a; };
 
+	//manipulate the reinforcementPool
+	void increaseReinforcementPool(int);
+	void decreaseReinforcementPool(int);
+
     void setLostPlayer(); // sets the Player's eliminated data member to true
     bool isLost(); // return whether the Player is eliminated or not
 

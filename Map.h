@@ -43,6 +43,7 @@ public:
     bool addArmies(int n);
     bool removeArmies(int n);
     bool haveTerritory(vector<Territory*> territories); // checks if this Territory is contained in the input vector
+    bool isAdjacent(int);
 
     friend bool operator ==(const Territory& t1, const Territory& t2);
     friend ostream & operator << (ostream &out, const Territory &c);

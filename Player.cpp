@@ -55,8 +55,9 @@ void Player::issueOrder(string order) {
 		orderList->add(n);
 	}
 	else {
-		Orders* o = new Orders(order);
-		orderList->add(o);
+		/*Orders* o = new Orders(order);
+		orderList->add(o);*/
+		cout << "Invalid order. Valid order Types: 1. Deploy, 2. Advance, 3. Bomb, 4. Blockade, 5 Airlift, 6. Negotiate." << endl;
 	}
 }
 
@@ -138,3 +139,9 @@ void Player::setLostPlayer()
     this->eliminated = true;
 }
 
+void Player::increaseReinforcementPool(int armies) {
+	this->reinforcementPool += armies;
+}
+void Player::decreaseReinforcementPool(int armies) {
+	this->reinforcementPool -= armies;
+}
