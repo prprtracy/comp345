@@ -9,7 +9,7 @@
 #include <random>
 #include <algorithm>
 #include <chrono>
-
+#include <ctime>
 
 MapLoader* Load() {
         MapLoader* mapLoader = new MapLoader();
@@ -63,10 +63,8 @@ int main(){
     }
 
 
-	//assign territories
+	//assign territories to each player
     vector<Territory*> territoryList = map->get_territories();
-//    vector<Territory*> territoriesCopy = map->listOfTerritories;
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     shuffle(territoryList.begin(), territoryList.end(), std::default_random_engine(seed));
 
     int turn = 0;
