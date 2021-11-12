@@ -40,9 +40,8 @@ public:
 	void issueOrder(string);
 
     //void issueOrder() {return this->playerStrategy->issueOrder();};
-
-
 	string get_name();
+    int getPlayerTurnNumber();
 	//print out the address of the player's orderlist
 	OrderList* get_orderList();
 	//print out the stored orders of the orderlist

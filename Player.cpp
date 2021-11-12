@@ -100,6 +100,10 @@ void Player::issueOrder(string order) {
 string Player::get_name() {
 	return this->name;
 }
+int Player::getPlayerTurnNumber()
+{
+    return playerNumber;
+}
 
 OrderList* Player::get_orderList() {
 	return this->orderList;

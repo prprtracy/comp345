@@ -50,7 +50,7 @@ int main(){
     std::cout << "The playing order is: ";
     for (int i = 0; i < 4; i++)
     {
-        cout << playerList[i]->getPlayerNumber() << " ";
+        cout << playerList[i]->getPlayerTurnNumber() << " ";
     }
     cout << endl;
 
