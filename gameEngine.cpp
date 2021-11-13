@@ -22,18 +22,18 @@ Engine::Engine()
     this->gameStatsObserver = nullptr;
 }
 
-GameEngine::GameEngine()
-{
-    this->map = nullptr;
-    vector<Player*> players;
-    this->firstPlayer = nullptr;
-    this->deck = nullptr;
-    this->numOfPlayers = 0;
-    this->observerOn = false;
-    this->phase = "empty";
-    this->phaseObserver = nullptr;
-    this->gameStatsObserver = nullptr;
-}
+//GameEngine::GameEngine()
+//{
+//    this->map = nullptr;
+//    vector<Player*> players;
+//    this->firstPlayer = nullptr;
+//    this->deck = nullptr;
+//    this->numOfPlayers = 0;
+//    this->observerOn = false;
+//    this->phase = "empty";
+//    this->phaseObserver = nullptr;
+//    this->gameStatsObserver = nullptr;
+//}
 
 // Copy constructor. Creates a deep copy of this GameEngine, and all of its components.
 // TODO: how to copy first player
@@ -107,6 +107,8 @@ void Engine::startupPhase()
 //==================================Reinforcement Phase==============================
 void Engine::reinforcementPhase(Player* currPlayer)
 {
+    phase = "Reinforcement Phase";
+    notify();
     cout << "\nConduct Reinforcement Phase" << endl;
 
     int bonusArmies = 0; // owning whole Continent bonus
@@ -142,6 +144,8 @@ void Engine::reinforcementPhase(Player* currPlayer)
 // Calls the issueOrder method of the player's strategy class
 void Engine::issueOrdersPhase(Player* currPlayer) {
 
+    phase = "Issue Order Phase";
+    notify();
     string o;
     cout << "Issue Order Phase" << endl;
     //if the player has armies in the pool, ask the player to deploy
@@ -180,6 +184,8 @@ void Engine::issueOrdersPhase(Player* currPlayer) {
 void Engine::executeOrdersPhase(Player* thisPlayer)
 {
     // execute deploy orders
+    phase = "Execute Order Phase";
+    notify();
     while (thisPlayer->get_orderList()->order_list.size() != 0) {
         thisPlayer->get_orderList()->pop();
     }
@@ -330,7 +336,7 @@ void Engine::gameStart()
     
 }
 
-//method to remove the player that does not have any country
+//method to remove the player that does not have any country (lost the game)
 void Engine::removePlayers()
 {
     Player* thisPlayer = nullptr;

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Orders.h"
 #include "Cards.h"
+#include "GameObserver.h"
 using namespace std;
 
 class Engine
@@ -51,7 +52,7 @@ private:
 	void setInitialArmies();
 	void setRandomOrder();
 	void setRandomTerritory();
-	void kickPlayers(); // checks if a Player has lost the game
+	void removePlayers(); // checks if a Player has lost the game
 	void endGamePhase(Player* winner); // launches end game winner message
 
 	GameEngine& operator =(const GameEngine& game);
