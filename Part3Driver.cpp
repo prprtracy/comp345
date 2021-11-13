@@ -78,12 +78,13 @@ int main(){
             turn = 0;
     }
 
-
+    //show the player the territories they have
 	for (int i = 0; i < territoryList.size(); i++)
 	{
-		cout << territoryList[i]->get_name() + " belongs to Player " << territoryList[i]->getOwner() << endl;
+		cout << territoryList[i]->get_name() + " is a territory of " << territoryList[i]->getOwner() << endl;
 	}
 
+    //start the main game loop
 	gameEngine.mainGameLoop();
 
 	delete map;

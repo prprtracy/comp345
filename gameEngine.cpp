@@ -69,75 +69,77 @@ void Engine::endExeOrder() {
 }
 
 //==================================Reinforcement Phase==============================
-void Engine::reinforcementPhase(Player* currPlayer)
+void Engine::reinforcementPhase(Player* thisPlayer)
 {
-    cout << "\nConduct Reinforcement Phase" << endl;
+    cout << "\n Reinforcement Phase" << endl;
 
-    int bonusArmies = 0; // owning whole Continent bonus
+    int bonusArmies = 0; // whole Continent bonus armies
     int reinforcement =3; //the min/default of reinforcement armies are 3
 
     //check if the player owns the Continent
-    Continent* currContinent = nullptr;
+    Continent* thisContinent = nullptr;
     //going through each Continent
     for (int i = 0; i < map->allContinentsInMap.size(); i++)
     {
-        currContinent = map->allContinentsInMap[i];
-//if the player owns the continent, he/she will get the bonus armies
-        if (currContinent->controlsContinent(currPlayer))
-            bonusArmies += currContinent->bonusArmies;
+        thisContinent = map->allContinentsInMap[i];
+//if the player owns the continent, the player will get bonus armies
+        if (thisContinent->controlsContinent(thisPlayer))
+            bonusArmies += thisContinent->bonusArmies;
     }
-    currContinent = nullptr;
+    thisContinent = nullptr;
 
-    // Player gets number of armies equal to their number of Territories / 3, unless this number is less than 3
-    if ((currPlayer->getTerritories().size() / 3) > reinforcement)
-        reinforcement = currPlayer->getTerritories().size() / 3;
+    // check if the player gets number of armies >= Territories / 3, unless he/she will get the default 3
+    if ((thisPlayer->getTerritories().size() / 3) > reinforcement)
+        reinforcement = thisPlayer->getTerritories().size() / 3;
 
 // add armies to the reinforcement pool
-    currPlayer->setReinforcementPool(reinforcement + bonusArmies);
+    thisPlayer->setReinforcementPool(reinforcement + bonusArmies);
 
-    cout << currPlayer->get_name() << " received " << reinforcement << " new reinforcements "
+    cout << thisPlayer->get_name() << " received " << reinforcement << " new reinforcements "
          << "and " << bonusArmies << " bonus reinforcements." << endl;
-    cout << " In total the player has " << currPlayer->getReinforcementPool() << " armies in their reinforcement pool." << endl;
+    cout << " In total the player has " << thisPlayer->getReinforcementPool() << " armies in their reinforcement pool." << endl;
     cout << "\nEnd of Reinforcement Phase" << endl;
 
 }
 
 //==================================Issuing Orders Phase==============================
-// Calls the issueOrder method of the player's strategy class
-void Engine::issueOrdersPhase(Player* currPlayer) {
+void Engine::issueOrdersPhase(Player* thisPlayer) {
 
     string o;
     cout<<"Issue Order Phase"<<endl;
     //if the player has armies in the pool, ask the player to deploy
-    if (currPlayer->getReinforcementPool() !=0){
+    if (thisPlayer->getReinforcementPool() !=0){
         cout<<"Deploy Order"<<endl;
-        currPlayer->toDefend();
-        currPlayer->issueOrder("Deploy");
+        //show players what territories to deploy
+        thisPlayer->toDefend();
+        thisPlayer->issueOrder("Deploy");
     }
-    //if the player has card on hand, ask the player to play the card
-    if (currPlayer->getHandOfPlayer()->getCardsOnHand().size()!= 0){
+    //if the player has cards on hand, ask the player to play the card by showing the player the cards he/she has
+    if (thisPlayer->getHandOfPlayer()->getCardsOnHand().size()!= 0){
         cout<<"\nPlease play one of your cards: "<<endl;
-        for(int i=0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
-            cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+        //show the player what cards he/she has
+        for(int i=0; i < thisPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
+            cout << thisPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
         }
-        cin >> o;
+        cin >> o;//read the input from the player (card name)
         //using the while loop to make sure the user input a correct command
-        while(!count(currPlayer->getHandOfPlayer()->getCardsOnHand().begin(), currPlayer->getHandOfPlayer()->getCardsOnHand().end(), o)){
+        while(!count(thisPlayer->getHandOfPlayer()->getCardsOnHand().begin(), thisPlayer->getHandOfPlayer()->getCardsOnHand().end(), o)){
             cout<< "\nError! Please re-entre. You have cards: " <<endl;
-            for(int i=0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
-                cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+            for(int i=0; i < thisPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
+                cout << thisPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
             }
             cin >> o;
         }
 
     }
-    currPlayer->issueOrder(o);//call the issue order with the user's input
+    thisPlayer->issueOrder(o);//call the issue order with the user's input to play the card
 
     //everyone should have an advance order
     cout<<"\nAdvance Order"<<endl;
-    currPlayer->toAttack();
-    currPlayer->toDefend();
-    currPlayer->issueOrder("Advance");
+    //show the player what territories he/she can attack or defence
+    thisPlayer->toAttack();
+    thisPlayer->toDefend();
+    thisPlayer->issueOrder("Advance");
 }
 
 //==================================Orders Execution Phase==============================
@@ -166,6 +168,7 @@ void Engine::mainGameLoop()
         }
 
         // ===============Reinforcement phase========
+        //keep playing for the users that are still in game
         for (int i = 0; i < this->players.size(); i++)
         {
             if (!this->players.at(i)->isLost())
@@ -214,7 +217,7 @@ void Engine::removePlayers()
         {
             cout << thisPlayer->get_name() << " has lost the game :(" << endl;
 
-            // the players should put back their cards
+            // the lost players put back their cards
             Hand* hand = thisPlayer->getHandOfPlayer();
             for (int j = 0; j < hand->getCardsOnHand().size(); j++)
             {
@@ -253,12 +256,12 @@ Player* Engine::checkWinner()
 
 void Engine::setNumberOfPlayers()
 {
-    int nbrOfplayers;
+    int numberOfplayers;
     while (true)
     {
         cout << "Please enter the number of players: ";
-        cin >> nbrOfplayers;
-        if (nbrOfplayers < 2 || nbrOfplayers > 5)
+        cin >> numberOfplayers;
+        if (numberOfplayers < 2 || numberOfplayers > 5)
         {
             cout << "Invalid number. Please try again." << endl;;
             continue;
@@ -268,7 +271,7 @@ void Engine::setNumberOfPlayers()
             break;
         }
     }
-    playersNum = nbrOfplayers;
+    playersNum = numberOfplayers;
 }
 int Engine::getNumberOfPlayers()
 {

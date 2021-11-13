@@ -94,7 +94,7 @@ public:
 
     //set the main loop and phases
     void mainGameLoop();
-    void reinforcementPhase(Player* currPlayer); // void for now
+    void reinforcementPhase(Player* thisPlayer); // void for now
     void issueOrdersPhase(Player* currPlayer);
     void executeOrdersPhase(Player* thisPlayer);
     void removePlayers(); // checks if a Player has lost the game
