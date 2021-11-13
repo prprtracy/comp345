@@ -69,11 +69,11 @@ public:
 		step = nextStep;
 	}
 
-    void setNbrOfPlayers();
+    void setNumberOfPlayers();
 
 
     //getters
-    int getNbrOfPlayers();
+    int getNumberOfPlayers();
     Map* getMap();
 
     vector<Player*> getPlayers();

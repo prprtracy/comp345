@@ -9,7 +9,7 @@
 Engine::Engine() {
 	step = State::Start;
 	player = new Player();
-	orders = new OrderList();
+//	orders = new OrderList();
 	deck = new Deck();
 	playersNum = 1;
 }
@@ -251,7 +251,7 @@ Player* Engine::checkWinner()
 }
 
 
-void Engine::setNbrOfPlayers()
+void Engine::setNumberOfPlayers()
 {
     int nbrOfplayers;
     while (true)
@@ -270,7 +270,7 @@ void Engine::setNbrOfPlayers()
     }
     playersNum = nbrOfplayers;
 }
-int Engine::getNbrOfPlayers()
+int Engine::getNumberOfPlayers()
 {
     return playersNum;
 }

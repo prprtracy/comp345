@@ -5,7 +5,7 @@
 #include <string>
 #include "Map.h"
 #include "Player.h"
-#include "GameEngine.h"
+#include "gameEngine.h"
 #include <random>
 #include <algorithm>
 #include <chrono>
