@@ -1,152 +1,186 @@
 #include <iostream>
 #include "gameEngine.h"
-#include "Map.h"
-#include "MapLoader.h"
-#include "Player.h"
-#include "Orders.h"
-#include "Cards.h"
+#include <random>
+#include <chrono> 
+//#include "Map.h"
+//#include "MapLoader.h"
+//#include "Player.h"
+//#include "Orders.h"
+//#include "Cards.h"
+//#include "CommandProcessor.h"
 
-Engine::Engine() {
-	step = State::Start;
-	player = new Player();
-//	orders = new OrderList();
-	deck = new Deck();
-	playersNum = 1;
+Engine::Engine()
+{
+    this->map = nullptr;
+    vector<Player*> players;
+    this->firstPlayer = nullptr;
+    this->deck = nullptr;
+    this->numOfPlayers = 0;
+    this->observerOn = false;
+    this->phase = "empty";
+    this->phaseObserver = nullptr;
+    this->gameStatsObserver = nullptr;
 }
 
-void Engine::readMap() {
-	// if( load successfully)
-		cout << "Map has been loaded successfully!";
-		setState(State :: mapLoading);
-	//else 
-		cout << "Map loading failed plz recheck the map!";
-		setState(State:: Start);
+GameEngine::GameEngine()
+{
+    this->map = nullptr;
+    vector<Player*> players;
+    this->firstPlayer = nullptr;
+    this->deck = nullptr;
+    this->numOfPlayers = 0;
+    this->observerOn = false;
+    this->phase = "empty";
+    this->phaseObserver = nullptr;
+    this->gameStatsObserver = nullptr;
 }
 
-void Engine::mapValidate() {
-	// if ( successfully)
-	cout << "Map validate successfully!";
-	setState(State::addPlayer);
-	//else 
-	cout << "Map is invalid!";
-	setState(State::mapLoading);
+// Copy constructor. Creates a deep copy of this GameEngine, and all of its components.
+// TODO: how to copy first player
+Engine::Engine(Engine& game)
+{
+    this->map = new Map(*game.map);
+    this->players;
+    for (int i = 0; i < game.players.size(); i++)
+    {
+        this->players.push_back(new Player(*game.players.at(i)));
+    }
+    this->firstPlayer = game.firstPlayer;
+    this->deck = new Deck(*game.deck);
+    this->numOfPlayers = game.numOfPlayers;
+    this->observerOn = game.observerOn;
+    this->phase = game.phase;
 }
 
-void Engine::addPlayer() {
-	// if( successfully)
-	cout << "Player add successfully!";
-	setState(State::reinAssign);
+// Destructor
+// This should be the only destructor called so it deletes all corresponding components (Map, Players, Deck, etc).
+Engine::~Engine()
+{
+    delete this->map;
+    delete this->deck;
+    this->firstPlayer = nullptr;
+
+    for (int i = 0; i < this->players.size(); i++)
+    {
+        delete this->players[i];
+        this->players.at(i) = nullptr;
+    }
+    this->players.clear();
+
+    delete this->phaseObserver;
+    delete this->gameStatsObserver;
 }
 
-void Engine::reinAssign() {
-	// if( successfully)
-	cout << "Reinforcement Assign successfully!";
-	setState(State::issueOrder);
-	//else
-	cout << "Reinforcement Assign failed because of"; // no enough soliders?, etc
+//==================================Startup Phase==============================
+void Engine::startupPhase()
+{
+    string order;
+    cout << "Welcome!" << endl;
+    do {
+        cout << "Please one of the orders in the list:" << endl;
+        cout << "loadmap" << endl;
+        cout << "validatemap" << endl;
+        cout << "addplayer" << endl;
+        cout << "gamestart" << endl;
+        cin >> order;
+        if (order == "loadmap")
+        {
+            loadmap();
+        }
+        else if(order == "validatemap")
+        {
+            validateMap();
+        }
+        else if (order == "addplayer")
+        {
+            addplayer();
+        }
+        else if (order == "gamestart")
+        {
+            gameStart();
+        }
+    } while (order != "gamestart");
+
 }
 
-void Engine::issueOrder() {
-	//Users input the order, and process, run, or repeat, etc.
-	setState(State::issueOrder);
-}
-
-void Engine::endIssueOrder() {
-	//Cases close and ruin constructors
-	setState(State::exeOrder);
-}
-
-void Engine::exeOrder() {
-	//make the order effects, ex: bomb card
-	//if(win)
-	setState(State::win);
-	//else
-	setState(State::issueOrder);
-}
-
-void Engine::endExeOrder() {
-	//Cases close and ruin constructors
-}
 
 //==================================Reinforcement Phase==============================
-void Engine::reinforcementPhase(Player* thisPlayer)
+void Engine::reinforcementPhase(Player* currPlayer)
 {
-    cout << "\n Reinforcement Phase" << endl;
+    cout << "\nConduct Reinforcement Phase" << endl;
 
-    int bonusArmies = 0; // whole Continent bonus armies
-    int reinforcement =3; //the min/default of reinforcement armies are 3
+    int bonusArmies = 0; // owning whole Continent bonus
+    int reinforcement = 3; //the min/default of reinforcement armies are 3
 
     //check if the player owns the Continent
-    Continent* thisContinent = nullptr;
+    Continent* currContinent = nullptr;
     //going through each Continent
     for (int i = 0; i < map->allContinentsInMap.size(); i++)
     {
-        thisContinent = map->allContinentsInMap[i];
-//if the player owns the continent, the player will get bonus armies
-        if (thisContinent->controlsContinent(thisPlayer))
-            bonusArmies += thisContinent->bonusArmies;
+        currContinent = map->allContinentsInMap[i];
+        //if the player owns the continent, he/she will get the bonus armies
+        if (currContinent->controlsContinent(currPlayer))
+            bonusArmies += currContinent->bonusArmies;
     }
-    thisContinent = nullptr;
+    currContinent = nullptr;
 
-    // check if the player gets number of armies >= Territories / 3, unless he/she will get the default 3
-    if ((thisPlayer->getTerritories().size() / 3) > reinforcement)
-        reinforcement = thisPlayer->getTerritories().size() / 3;
+    // Player gets number of armies equal to their number of Territories / 3, unless this number is less than 3
+    if ((currPlayer->getTerritories().size() / 3) > reinforcement)
+        reinforcement = currPlayer->getTerritories().size() / 3;
 
-// add armies to the reinforcement pool
-    thisPlayer->setReinforcementPool(reinforcement + bonusArmies);
+    // add armies to the reinforcement pool
+    currPlayer->setReinforcementPool(reinforcement + bonusArmies);
 
-    cout << thisPlayer->get_name() << " received " << reinforcement << " new reinforcements "
-         << "and " << bonusArmies << " bonus reinforcements." << endl;
-    cout << " In total the player has " << thisPlayer->getReinforcementPool() << " armies in their reinforcement pool." << endl;
+    cout << currPlayer->get_name() << " received " << reinforcement << " new reinforcements "
+        << "and " << bonusArmies << " bonus reinforcements." << endl;
+    cout << " In total the player has " << currPlayer->getReinforcementPool() << " armies in their reinforcement pool." << endl;
     cout << "\nEnd of Reinforcement Phase" << endl;
 
 }
 
 //==================================Issuing Orders Phase==============================
-void Engine::issueOrdersPhase(Player* thisPlayer) {
+// Calls the issueOrder method of the player's strategy class
+void Engine::issueOrdersPhase(Player* currPlayer) {
 
     string o;
-    cout<<"Issue Order Phase"<<endl;
+    cout << "Issue Order Phase" << endl;
     //if the player has armies in the pool, ask the player to deploy
-    if (thisPlayer->getReinforcementPool() !=0){
-        cout<<"Deploy Order"<<endl;
-        //show players what territories to deploy
-        thisPlayer->toDefend();
-        thisPlayer->issueOrder("Deploy");
+    if (currPlayer->getReinforcementPool() != 0) {
+        cout << "Deploy Order" << endl;
+        currPlayer->toDefend();
+        currPlayer->issueOrder("Deploy");
     }
-    //if the player has cards on hand, ask the player to play the card by showing the player the cards he/she has
-    if (thisPlayer->getHandOfPlayer()->getCardsOnHand().size()!= 0){
-        cout<<"\nPlease play one of your cards: "<<endl;
-        //show the player what cards he/she has
-        for(int i=0; i < thisPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
-            cout << thisPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+    //if the player has card on hand, ask the player to play the card
+    if (currPlayer->getHandOfPlayer()->getCardsOnHand().size() != 0) {
+        cout << "\nPlease play one of your cards: " << endl;
+        for (int i = 0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++) {
+            cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
         }
-        cin >> o;//read the input from the player (card name)
+        cin >> o;
         //using the while loop to make sure the user input a correct command
-        while(!count(thisPlayer->getHandOfPlayer()->getCardsOnHand().begin(), thisPlayer->getHandOfPlayer()->getCardsOnHand().end(), o)){
-            cout<< "\nError! Please re-entre. You have cards: " <<endl;
-            for(int i=0; i < thisPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++){
-                cout << thisPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+        while (!count(currPlayer->getHandOfPlayer()->getCardsOnHand().begin(), currPlayer->getHandOfPlayer()->getCardsOnHand().end(), o)) {
+            cout << "\nError! Please re-entre. You have cards: " << endl;
+            for (int i = 0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++) {
+                cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
             }
             cin >> o;
         }
 
     }
-    thisPlayer->issueOrder(o);//call the issue order with the user's input to play the card
+    currPlayer->issueOrder(o);//call the issue order with the user's input
 
     //everyone should have an advance order
-    cout<<"\nAdvance Order"<<endl;
-    //show the player what territories he/she can attack or defence
-    thisPlayer->toAttack();
-    thisPlayer->toDefend();
-    thisPlayer->issueOrder("Advance");
+    cout << "\nAdvance Order" << endl;
+    currPlayer->toAttack();
+    currPlayer->toDefend();
+    currPlayer->issueOrder("Advance");
 }
 
 //==================================Orders Execution Phase==============================
 void Engine::executeOrdersPhase(Player* thisPlayer)
 {
     // execute deploy orders
-    while(thisPlayer->get_orderList()->order_list.size() != 0) {
+    while (thisPlayer->get_orderList()->order_list.size() != 0) {
         thisPlayer->get_orderList()->pop();
     }
 }
@@ -168,7 +202,6 @@ void Engine::mainGameLoop()
         }
 
         // ===============Reinforcement phase========
-        //keep playing for the users that are still in game
         for (int i = 0; i < this->players.size(); i++)
         {
             if (!this->players.at(i)->isLost())
@@ -201,8 +234,100 @@ void Engine::mainGameLoop()
 
     }
 
-    cout << "==========   END Game =======" << endl;
+    cout << "#############   END Game  ###########################" << endl;
     cout << "        Congratulations, " << winner->get_name() << " You won!" << endl;
+    cout << "########################################" << endl;
+}
+
+void Engine::loadmap()
+{
+    string mapName;
+    cout << "Please key in the file name!" << endl;
+    cin >> mapName;
+    map->GetMap(mapName);
+    cout << "Map successfully loaded!" << endl;
+}
+
+void Engine::validateMap()
+{
+    bool isValid = false;
+    cout << "Please keyin the map file name!" << endl;
+    isValid = map->validate();
+    if (map != NULL || !isValid)
+    {
+       cout << "Map has been validated!" << endl;
+            
+    }
+    else
+    {
+      cout << "Map loading failed! pls try again." << endl;
+      loadmap();
+    }
+    
+}
+
+void Engine::addplayer()
+{
+    string playerName;
+    do
+    {
+        cout << "There should be 2-6 players, pls keyin the next players' name! Type 'Enough' to stop adding." << endl;
+        cin >> playerName;
+        numOfPlayers++;
+        if (playerName == "Enough" && numOfPlayers >= 2)
+        {
+            break;
+        }
+        if (playerName == "Enough" && numOfPlayers < 2)
+        {
+            cout << "Please add at least one more player!";
+        }
+    } while (numOfPlayers < 2 || numOfPlayers > 5);
+}
+
+void Engine::gameStart()
+{
+    int turn = 0;
+    int numOfArmies;
+    this->deck = new Deck();
+    Player* p = nullptr;
+    vector<Territory*> territoriesCopy = map->listOfTerritories;
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    shuffle(territoriesCopy.begin(), territoriesCopy.end(), std::default_random_engine(seed));
+    shuffle(players.begin(), players.end(), std::default_random_engine(seed));
+
+    //distribute the territories
+    for (int i = 0; i < territoriesCopy.size(); i++)
+    {
+        territoriesCopy[i]->setOwner(players[turn]); // set the owner of this Territory to be the Player it is assigned to
+        players[turn]->addTerritory(territoriesCopy[i]);
+        turn++;
+
+        if (turn > (players.size() - 1))
+            turn = 0;
+    }
+    //set players' gaming order
+    std::cout << "The playing order is: ";
+    for (int i = 0; i < numOfPlayers; i++)
+    {
+        cout << players[i]->getPlayerNumber() << " ";
+    }
+    cout << endl;
+
+    //attach number to all players
+    for (int i = 0; i < players.size(); i++)
+    {
+        players.at(i)->addReinforcements(numOfArmies);
+    }
+    for (int i = 0; i < numOfPlayers; i++) {
+        for (int i = 0; i < 10; i++)
+        {
+            this->deck->draw(p);
+        }
+        this->players.push_back(p);
+    }
+    
 }
 
 //method to remove the player that does not have any country
@@ -217,7 +342,7 @@ void Engine::removePlayers()
         {
             cout << thisPlayer->get_name() << " has lost the game :(" << endl;
 
-            // the lost players put back their cards
+            // the players should put back their cards
             Hand* hand = thisPlayer->getHandOfPlayer();
             for (int j = 0; j < hand->getCardsOnHand().size(); j++)
             {
@@ -252,39 +377,3 @@ Player* Engine::checkWinner()
     }
     return nullptr;
 }
-
-
-void Engine::setNumberOfPlayers()
-{
-    int numberOfplayers;
-    while (true)
-    {
-        cout << "Please enter the number of players: ";
-        cin >> numberOfplayers;
-        if (numberOfplayers < 2 || numberOfplayers > 5)
-        {
-            cout << "Invalid number. Please try again." << endl;;
-            continue;
-        }
-        else
-        {
-            break;
-        }
-    }
-    playersNum = numberOfplayers;
-}
-int Engine::getNumberOfPlayers()
-{
-    return playersNum;
-}
-Map* Engine::getMap()
-{
-    return map;
-}
-
-
-
-
-
-
-
