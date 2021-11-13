@@ -89,5 +89,15 @@ int main(){
 	delete map;
 	map = nullptr;
 
+    delete p1;
+    p1= nullptr;
+    delete p2;
+    p2 = nullptr;
+    delete p3;
+    p3 = nullptr;
+    delete p4;
+    p4 = nullptr;
+
+
     return 0;
 }
