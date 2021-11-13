@@ -105,7 +105,7 @@ void Engine::startupPhase()
 
 
 //==================================Reinforcement Phase==============================
-void Engine::reinforcementPhase(Player* currPlayer)
+void Engine::reinforcementPhase(Player* thisPlayer)
 {
     phase = "Reinforcement Phase";
     notify();
@@ -121,63 +121,63 @@ void Engine::reinforcementPhase(Player* currPlayer)
     {
         currContinent = map->allContinentsInMap[i];
         //if the player owns the continent, he/she will get the bonus armies
-        if (currContinent->controlsContinent(currPlayer))
+        if (currContinent->controlsContinent(thisPlayer))
             bonusArmies += currContinent->bonusArmies;
     }
     currContinent = nullptr;
 
     // Player gets number of armies equal to their number of Territories / 3, unless this number is less than 3
-    if ((currPlayer->getTerritories().size() / 3) > reinforcement)
-        reinforcement = currPlayer->getTerritories().size() / 3;
+    if ((thisPlayer->getTerritories().size() / 3) > reinforcement)
+        reinforcement = thisPlayer->getTerritories().size() / 3;
 
     // add armies to the reinforcement pool
-    currPlayer->setReinforcementPool(reinforcement + bonusArmies);
+    thisPlayer->setReinforcementPool(reinforcement + bonusArmies);
 
-    cout << currPlayer->get_name() << " received " << reinforcement << " new reinforcements "
-        << "and " << bonusArmies << " bonus reinforcements." << endl;
-    cout << " In total the player has " << currPlayer->getReinforcementPool() << " armies in their reinforcement pool." << endl;
+    cout << thisPlayer->get_name() << " received " << reinforcement << " new reinforcements "
+         << "and " << bonusArmies << " bonus reinforcements." << endl;
+    cout << " In total the player has " << thisPlayer->getReinforcementPool() << " armies in their reinforcement pool." << endl;
     cout << "\nEnd of Reinforcement Phase" << endl;
 
 }
 
 //==================================Issuing Orders Phase==============================
 // Calls the issueOrder method of the player's strategy class
-void Engine::issueOrdersPhase(Player* currPlayer) {
+void Engine::issueOrdersPhase(Player* thisPlayer) {
 
     phase = "Issue Order Phase";
     notify();
     string o;
     cout << "Issue Order Phase" << endl;
     //if the player has armies in the pool, ask the player to deploy
-    if (currPlayer->getReinforcementPool() != 0) {
+    if (thisPlayer->getReinforcementPool() != 0) {
         cout << "Deploy Order" << endl;
-        currPlayer->toDefend();
-        currPlayer->issueOrder("Deploy");
+        thisPlayer->toDefend();
+        thisPlayer->issueOrder("Deploy");
     }
     //if the player has card on hand, ask the player to play the card
-    if (currPlayer->getHandOfPlayer()->getCardsOnHand().size() != 0) {
+    if (thisPlayer->getHandOfPlayer()->getCardsOnHand().size() != 0) {
         cout << "\nPlease play one of your cards: " << endl;
-        for (int i = 0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++) {
-            cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+        for (int i = 0; i < thisPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++) {
+            cout << thisPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
         }
         cin >> o;
         //using the while loop to make sure the user input a correct command
-        while (!count(currPlayer->getHandOfPlayer()->getCardsOnHand().begin(), currPlayer->getHandOfPlayer()->getCardsOnHand().end(), o)) {
+        while (!count(thisPlayer->getHandOfPlayer()->getCardsOnHand().begin(), thisPlayer->getHandOfPlayer()->getCardsOnHand().end(), o)) {
             cout << "\nError! Please re-entre. You have cards: " << endl;
-            for (int i = 0; i < currPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++) {
-                cout << currPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
+            for (int i = 0; i < thisPlayer->getHandOfPlayer()->getCardsOnHand().size(); i++) {
+                cout << thisPlayer->getHandOfPlayer()->getCardsOnHand().at(i) << ' ';
             }
             cin >> o;
         }
 
     }
-    currPlayer->issueOrder(o);//call the issue order with the user's input
+    thisPlayer->issueOrder(o);//call the issue order with the user's input
 
     //everyone should have an advance order
     cout << "\nAdvance Order" << endl;
-    currPlayer->toAttack();
-    currPlayer->toDefend();
-    currPlayer->issueOrder("Advance");
+    thisPlayer->toAttack();
+    thisPlayer->toDefend();
+    thisPlayer->issueOrder("Advance");
 }
 
 //==================================Orders Execution Phase==============================

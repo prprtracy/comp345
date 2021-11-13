@@ -28,8 +28,8 @@ public:
 	void validateMap();
 	void addplayer();
 	void gameStart();
-	void reinforcementPhase(Player* currPlayer); // void for now
-	void issueOrdersPhase(Player* currPlayer);
+	void reinforcementPhase(Player* thisPlayer); // void for now
+	void issueOrdersPhase(Player* thisPlayer);
 	void executeOrdersPhase(Player* thisPlayer);
 
 	Player* checkWinner();
