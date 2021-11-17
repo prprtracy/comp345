@@ -1,0 +1,4 @@
+addplayer
+no
+yes
+why
