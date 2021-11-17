@@ -4,7 +4,8 @@ using namespace std;
 int main() {
 	//simulate engine for demo use, the string in the vector represents each state of the game, the dynamic pointer points to current state
 	int pointer = 0;
-	vector<string> engine= {"start","maploaded","map validated","player added","win"};
+	vector<string> engine= {"start","maploaded","mapvalidated","playersadded","assignreignforcement","win"};
+	cout << engine.size();
 	//creates the command processor and file adaptor
 	commandProcessor cp = commandProcessor();
 	fileCommandProcessorAdaptor fcpa = fileCommandProcessorAdaptor("commands.txt");
@@ -22,6 +23,7 @@ int main() {
 			cp.getCommand();
 			cout << "\nCurrent commands(first in first out):\n";
 			cp.showList();
+			cout << "\n";
 			cout << "Please select one of the following choices:\n";
 			cout << "1. continue input by console.\n" << "2. input by a .txt file\n" << "3. end of input and start execute\n";
 			cin >> selection;
@@ -32,8 +34,9 @@ int main() {
 			cp.getFileCommand(fcpa.readCommand());
 			cout << "\nCurrent commands(first in first out):\n";
 			cp.showList();
+			cout << "\n";
 			cout << "Please select one of the following choices:\n";
-			cout << "1. continue input by console.\n" << "2. input by a .txt file\n" << "3. end of input and start execute\n";
+			cout << "1. input by console.\n" << "2. continue input by another .txt file\n" << "3. end of input and start execute\n";
 			cin >> selection;
 		}
 		//option 3 and looping, validating and excuting the methods from the list 
@@ -41,27 +44,38 @@ int main() {
 			int index = 0;
 			cout << "start executing the command list\n";
 			cout << "simulated game engine start looping\n";
-			while (pointer < 5&&index<cp.lis.getList().size()) {
+			while (pointer < engine.size()&&index<cp.lis.getList().size()) {
 				cout << "current phase: " << engine[pointer]<<"\n";
-				cp.execute(engine[pointer],index);
 				string s = cp.lis.list[index].getContent();
-				if (s.compare("loadmap") == 0)
-					pointer = 1;
-				if (s.compare("map loaded") == 0)
-					pointer = 1;
-				if (s.compare("validemap") == 0)
-					pointer = 2;
-				if (s.compare("addplayer") == 0)
-					pointer = 2;
-				if (s.compare("gamestart") == 0)
-					pointer = 3;
-				if (s.compare("replay") == 0)
-					pointer = 0;
-				if (s.compare("quit") == 0)
+				string t=cp.cut(s);
+				//skipping the ingame event
+				if (pointer == 4) {
+					cout << "game running...\ngamefinished.\n";
 					pointer = 5;
+				}
+				//state modifier in engine
+				if (cp.validate(engine[pointer], s)) {
+					cp.execute(engine[pointer], index);
+					if (t.compare("loadmap") == 0)
+						pointer = 1;
+					if (t.compare("validatemap") == 0)
+						pointer = 2;
+					if (t.compare("addplayer") == 0)
+						pointer = 3;
+					if (t.compare("gamestart") == 0)
+						pointer = 4;
+					if (t.compare("replay") == 0)
+						pointer = 0;
+					if (t.compare("quit") == 0)
+						pointer = 6;
+				}
+				else
+					cout << "the command "<<s<< " is not in valid state to run.\n";
+				index += 1;
 			}
-			cout << "execution finished, thanks for using";
+			selection = 0;
 		}
 	}
+	cout << "\nexecution finished, thanks for using\n";
 	return 0;
 }

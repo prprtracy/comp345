@@ -102,8 +102,7 @@ using namespace std;
     }
 
     //the validate method, that take the current state and match with the command, then return a bool that whether or not its valid
-    bool commandProcessor::validate(string state, command c) {
-        string s = c.getContent();
+    bool commandProcessor::validate(string state, string s) {
         string t = cut(s);
         int u = 0; 
         if (t.compare("loadmap") == 0) {
@@ -133,47 +132,37 @@ using namespace std;
             return false;
     }
     //the execute method that generates and save the effect of command, also output the message
-    bool commandProcessor::execute(string state,int i) {
+    void commandProcessor::execute(string state,int i) {
         string s = lis.list[i].getContent();
         string t = cut(s);
-        if (validate(state, lis.list[i])) {
             if (t.compare("loadmap") == 0) {
-                int i = s.find("<");
-                int j = s.find(">");
-                string u = s.substr(i + 1, j);
-                lis.list[i].saveEffect("loaded map " + u);
+                int j = s.find("<");
+                int k = s.find(">");
+                string u = s.substr(j , k-1);
+                lis.list[i].saveEffect("loaded map"+u);
                 cout << "map " << u << " loaded.\n";
-                return true;
             }
             if (t.compare("validatemap") == 0) {
                 lis.list[i].saveEffect("map validated");
                 cout << "map validated.\n";
-                return true;
             }
             if (t.compare("addplayer") == 0) {
-                int i = s.find("<");
-                int j = s.find(">");
-                string u = s.substr(i + 1, j);
+                int j = s.find("<");
+                int k = s.find(">");
+                string u = s.substr(j, k-1);
                 lis.list[i].saveEffect("player " + u + " added");
                 cout << "player " << u << " added.\n";
-                return true;
             }
             if (t.compare("gamestart") == 0) {
                 lis.list[i].saveEffect("game started");
                 cout << "all set, game begin.\n";
-                return true;
             }
             if (t.compare("replay") == 0) {
                 lis.list[i].saveEffect("restarted");
                 cout << "restarting the game.\n";
-                return true;
             }
             if (t.compare("quit") == 0) {
                 lis.list[i].saveEffect("quit the game");
                 cout << "game finished, shutting down.\n";
-                return true;
             }
-        }
-        else
-            return false;
     }

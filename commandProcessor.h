@@ -40,7 +40,7 @@ public:
 	void getCommand();
 	void getFileCommand(vector<string> v);
 	void showList();
-	bool validate(string state, command c);
-	bool execute(string state, int i);
+	bool validate(string state, string s);
+	void execute(string state, int i);
 };
 #endif
