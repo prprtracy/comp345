@@ -5,6 +5,7 @@
 #include "Orders.h"
 #include "Cards.h"
 #include "GameObserver.h"
+#include "commandProcessor.h"
 using namespace std;
 
 class Engine
@@ -22,9 +23,11 @@ public:
 	string phaseStage();
 	string command;
 
+    void tournament();
 	//set the main loop and phases
 	void mainGameLoop();
 	void loadmap();
+
 	void validateMap();
 	void addplayer();
 	void gameStart();
