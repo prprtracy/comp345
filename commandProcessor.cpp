@@ -135,6 +135,41 @@ using namespace std;
     void commandProcessor::execute(string state,int i) {
         string s = lis.list[i].getContent();
         string t = cut(s);
+
+        if (t.compare("listofmapfiles") == 0) {
+            int j = s.find("<");
+            int k = s.find(">");
+            string u = s.substr(j , k-1);
+            lis.list[i].saveEffect("list of maps"+u);
+            cout << "map Map1, Map2, Map3 loaded.\n";
+        }
+
+
+
+        if (t.compare("listofplayerstrategies") == 0) {
+            int j = s.find("<");
+            int k = s.find(">");
+            string u = s.substr(j , k-1);
+            lis.list[i].saveEffect("list of players trategies"+u);
+            cout << "trategies including Aggressive, Benevolent, Neutral, Cheater.\n";
+        }
+
+        if (t.compare("numberofgames") == 0) {
+            int j = s.find("<");
+            int k = s.find(">");
+            string u = s.substr(j , k-1);
+            lis.list[i].saveEffect("numberofgames"+u);
+            cout << "number of games:" <<u "\n";
+        }
+
+        if (t.compare("maxnumberofturns") == 0) {
+            int j = s.find("<");
+            int k = s.find(">");
+            string u = s.substr(j , k-1);
+            lis.list[i].saveEffect("maxnumberofturns"+u);
+            cout << "max number of turns:" <<u "\n";
+        }
+
             if (t.compare("loadmap") == 0) {
                 int j = s.find("<");
                 int k = s.find(">");
