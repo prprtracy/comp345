@@ -36,6 +36,64 @@ using namespace std;
     void commandList::add(command c) {
         list.push_back(c);
     }
+
+    class Tournament {
+    public:
+        string M;
+        string P;
+        int G;
+        int D;
+
+        Tournament() {}
+        Tournament(string m, string p, int g, int d) {
+            M = m;
+            P = p;
+            G = g;
+            D = d;
+        }
+
+        vector<string> getm() {
+            string s = M;
+            vector<string> v;
+            int i = 0;
+            while (i != -1) {
+                i = M.find(",");
+                string t = M.substr(0, i - 1);
+                v.push_back(s);
+                s.substr(i);
+            }
+            return v;
+        }
+
+        vector<string> getp() {
+            string s = P;
+            vector<string> v;
+            int i = 0;
+            while (i != -1) {
+                i = P.find(",");
+                string t = M.substr(0, i - 1);
+                v.push_back(s);
+                s.substr(i);
+            }
+            return v;
+        }
+
+        int getg() {
+            return G;
+        }
+
+        int getd() {
+            return D;
+        }
+
+        void showTournament() {
+            cout << "M: " << M;
+            cout << "\nP: " << P;
+            cout << "\nG: " << G;
+            cout << "\nD: " << D;
+        }
+    };
+
     //The methods of the commandProcessor object
     //readcommand method that take and validate the string from the input of the console, in invalid case it will return blank space and output warning message
     string commandProcessor::readCommand() {
@@ -79,6 +137,148 @@ using namespace std;
         else
             return s;
     }
+
+    int findAll(string str, string sub) {
+        vector<int> positions;
+        int pos = str.find(sub, 0);
+        while (pos != string::npos)
+        {
+            positions.push_back(pos);
+            pos = str.find(sub, pos + 1);
+        }
+        return positions.size();
+    }
+
+    bool isTournament(string s) {
+        string t = s.substr(0, 10);
+        if (t.compare("tournament") == 0)
+            return true;
+        else
+            return false;
+    }
+
+    vector<string> cutTournament(string s) {
+        vector<string>v;
+        string t = s.substr(10);
+        if (t[1]=='-'&&t[2] == 'M') {
+            int i = t.find(">");
+            if (i != -1) {
+                string u = t.substr(0, i+1);
+                v.push_back(u);
+                t = t.substr(i + 1);
+            }
+        }
+        if (t[1] == '-' && t[2] == 'P') {
+            int i = t.find(">");
+            if (i != -1) {
+                string u = t.substr(0, i+1);
+                v.push_back(u);
+                t = t.substr(i + 1);
+            }
+        }
+        if (t[1] == '-' && t[2] == 'G') {
+            int i = t.find(">");
+            if (i != -1) {
+                string u = t.substr(0, i+1);
+                v.push_back(u);
+                t = t.substr(i + 1);
+            }
+        }
+        if (t[1] == '-' && t[2] == 'D') {
+            int i = t.find(">");
+            if (i != -1) {
+                string u = t.substr(0, i+1);
+                v.push_back(u);
+            }
+        }
+        return v;
+    }
+
+    string makeM(vector<string> v) {
+        string s = v[0];
+        int i=findAll(s,",");
+        if (i >= 1 && i <= 5) {
+            int j = s.find("<");
+            int k = s.find(">");
+            if (j != -1 && k != -1) {
+                string t = s.substr(j + 1, k - j-1);
+                return t;
+            }
+            else
+                throw;
+        }
+        else
+            throw;
+    }
+
+    string makeP(vector<string> v) {
+        string s = v[1];
+        int i = findAll(s,",");
+        if (i >= 2 && i <= 4) {
+            int j = s.find("<");
+            int k = s.find(">");
+            if (j != -1 && k != -1) {
+                string t = s.substr(j + 1, k - j-1);
+                return t;
+            }
+            else
+                throw;
+        }
+        else
+            throw;
+    }
+
+    int makeG(vector<string> v) {
+        string s = v[2];
+        int j = s.find("<");
+        int k = s.find(">");
+        if (j != -1 && k != -1) {
+            string t = s.substr(j + 1, k - j);
+            int i = stoi(t);
+            if (i >= 1 && i <= 5)
+                return i;
+            else
+                throw;
+        }
+        else
+            throw;
+    }
+    
+    int makeD(vector<string> v) {
+        string s = v[3];
+        int j = s.find("<");
+        int k = s.find(">");
+        if (j != -1 && k != -1) {
+            string t = s.substr(j + 1, k - j);
+            int i = stoi(t);
+            if (i >= 10 && i <= 50)
+                return i;
+            else
+                throw;
+        }
+        else
+            throw;
+    }
+
+    Tournament createTournament(string command) {
+        try {
+            if (isTournament(command)) {
+                vector<string> v = cutTournament(command);
+                string m = makeM(v);
+                string p = makeP(v);
+                int g = makeG(v);
+                int d = makeD(v);
+                Tournament t = Tournament(m, p, g, d);
+                return t;
+            }
+            else
+                throw;
+        }
+        catch (exception e) {
+            cout << command << " is not a valid command.\n";
+        }
+    }
+
     //the public method that call both the read and save methods
     void commandProcessor::getCommand() {
         string s = readCommand();
@@ -135,41 +335,6 @@ using namespace std;
     void commandProcessor::execute(string state,int i) {
         string s = lis.list[i].getContent();
         string t = cut(s);
-
-        if (t.compare("listofmapfiles") == 0) {
-            int j = s.find("<");
-            int k = s.find(">");
-            string u = s.substr(j , k-1);
-            lis.list[i].saveEffect("list of maps"+u);
-            cout << "map Map1, Map2, Map3 loaded.\n";
-        }
-
-
-
-        if (t.compare("listofplayerstrategies") == 0) {
-            int j = s.find("<");
-            int k = s.find(">");
-            string u = s.substr(j , k-1);
-            lis.list[i].saveEffect("list of players trategies"+u);
-            cout << "trategies including Aggressive, Benevolent, Neutral, Cheater.\n";
-        }
-
-        if (t.compare("numberofgames") == 0) {
-            int j = s.find("<");
-            int k = s.find(">");
-            string u = s.substr(j , k-1);
-            lis.list[i].saveEffect("numberofgames"+u);
-            cout << "number of games:" <<u "\n";
-        }
-
-        if (t.compare("maxnumberofturns") == 0) {
-            int j = s.find("<");
-            int k = s.find(">");
-            string u = s.substr(j , k-1);
-            lis.list[i].saveEffect("maxnumberofturns"+u);
-            cout << "max number of turns:" <<u "\n";
-        }
-
             if (t.compare("loadmap") == 0) {
                 int j = s.find("<");
                 int k = s.find(">");
