@@ -107,6 +107,16 @@ public:
         cout << "\nG: " << G;
         cout << "\nD: " << D;
     }
+    void showResult (){
+        for (int i =0; i < getm().size; i++){
+            cout<<"Map: "<< i <<endl;
+            for (int j=0; j< getg(); j++){
+                cout<<"Game: "<< i <<endl;
+                string random = getp()[rand() % getp().size()];
+                cout<<"Winner: " <<random <<endl;
+            }
+        }
+    }
 };
 
 //The methods of the commandProcessor object
