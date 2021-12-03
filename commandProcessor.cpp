@@ -37,6 +37,18 @@ void commandList::add(command c) {
     list.push_back(c);
 }
 
+int findAll(string str, string sub) {
+    vector<int> positions;
+    int pos = str.find(sub, 0);
+    while (pos != string::npos)
+    {
+        positions.push_back(pos);
+        pos = str.find(sub, pos + 1);
+    }
+    return positions.size();
+}
+
+
 class Tournament {
 public:
     string M;
@@ -55,28 +67,31 @@ public:
     vector<string> getm() {
         string s = M;
         vector<string> v;
-        int i = 0;
-        while (i != -1) {
-            i = M.find(",");
-            string t = M.substr(0, i - 1);
-            v.push_back(s);
-            s.substr(i);
+        int i = s.find(",");
+        int j = findAll(s, ",");
+        for (int k = 0; k < j; k++) {
+            string t = s.substr(0, i);
+            v.push_back(t);
+            s = s.substr(i + 1);
         }
+        v.push_back(s);
         return v;
     }
 
     vector<string> getp() {
         string s = P;
         vector<string> v;
-        int i = 0;
-        while (i != -1) {
-            i = P.find(",");
-            string t = M.substr(0, i - 1);
-            v.push_back(s);
-            s.substr(i);
+        int i = s.find(",");
+        int j = findAll(s, ",");
+        for (int k = 0; k < j; k++) {
+            string t = s.substr(0, i);
+            v.push_back(t);
+            s = s.substr(i + 1);
         }
+        v.push_back(s);
         return v;
     }
+
 
     int getg() {
         return G;
@@ -138,17 +153,6 @@ string commandProcessor::cut(string s) {
         return s;
 }
 
-int findAll(string str, string sub) {
-    vector<int> positions;
-    int pos = str.find(sub, 0);
-    while (pos != string::npos)
-    {
-        positions.push_back(pos);
-        pos = str.find(sub, pos + 1);
-    }
-    return positions.size();
-}
-
 bool isTournament(string s) {
     string t = s.substr(0, 10);
     if (t.compare("tournament") == 0)
@@ -160,10 +164,10 @@ bool isTournament(string s) {
 vector<string> cutTournament(string s) {
     vector<string>v;
     string t = s.substr(10);
-    if (t[1]=='-'&&t[2] == 'M') {
+    if (t[1] == '-' && t[2] == 'M') {
         int i = t.find(">");
         if (i != -1) {
-            string u = t.substr(0, i+1);
+            string u = t.substr(0, i + 1);
             v.push_back(u);
             t = t.substr(i + 1);
         }
@@ -171,7 +175,7 @@ vector<string> cutTournament(string s) {
     if (t[1] == '-' && t[2] == 'P') {
         int i = t.find(">");
         if (i != -1) {
-            string u = t.substr(0, i+1);
+            string u = t.substr(0, i + 1);
             v.push_back(u);
             t = t.substr(i + 1);
         }
@@ -179,7 +183,7 @@ vector<string> cutTournament(string s) {
     if (t[1] == '-' && t[2] == 'G') {
         int i = t.find(">");
         if (i != -1) {
-            string u = t.substr(0, i+1);
+            string u = t.substr(0, i + 1);
             v.push_back(u);
             t = t.substr(i + 1);
         }
@@ -187,7 +191,7 @@ vector<string> cutTournament(string s) {
     if (t[1] == '-' && t[2] == 'D') {
         int i = t.find(">");
         if (i != -1) {
-            string u = t.substr(0, i+1);
+            string u = t.substr(0, i + 1);
             v.push_back(u);
         }
     }
@@ -196,12 +200,12 @@ vector<string> cutTournament(string s) {
 
 string makeM(vector<string> v) {
     string s = v[0];
-    int i=findAll(s,",");
+    int i = findAll(s, ",");
     if (i >= 1 && i <= 5) {
         int j = s.find("<");
         int k = s.find(">");
         if (j != -1 && k != -1) {
-            string t = s.substr(j + 1, k - j-1);
+            string t = s.substr(j + 1, k - j - 1);
             return t;
         }
         else
@@ -213,12 +217,12 @@ string makeM(vector<string> v) {
 
 string makeP(vector<string> v) {
     string s = v[1];
-    int i = findAll(s,",");
+    int i = findAll(s, ",");
     if (i >= 2 && i <= 4) {
         int j = s.find("<");
         int k = s.find(">");
         if (j != -1 && k != -1) {
-            string t = s.substr(j + 1, k - j-1);
+            string t = s.substr(j + 1, k - j - 1);
             return t;
         }
         else
@@ -277,6 +281,7 @@ Tournament createTournament(string command) {
     catch (exception e) {
         cout << command << " is not a valid command.\n";
     }
+    return Tournament();
 }
 
 //the public method that call both the read and save methods
@@ -297,7 +302,7 @@ void commandProcessor::getFileCommand(vector<string> v) {
 //the show list method to demonstrate current commands in the list.
 void commandProcessor::showList() {
     for (int i = 0; i < lis.getList().size(); i++) {
-        cout << lis.list[i].getContent()<<"\n";
+        cout << lis.list[i].getContent() << "\n";
     }
 }
 
@@ -332,14 +337,14 @@ bool commandProcessor::validate(string state, string s) {
     return false;
 }
 //the execute method that generates and save the effect of command, also output the message
-void commandProcessor::execute(string state,int i) {
+void commandProcessor::execute(string state, int i) {
     string s = lis.list[i].getContent();
     string t = cut(s);
     if (t.compare("loadmap") == 0) {
         int j = s.find("<");
         int k = s.find(">");
-        string u = s.substr(j , k-1);
-        lis.list[i].saveEffect("loaded map"+u);
+        string u = s.substr(j, k - 1);
+        lis.list[i].saveEffect("loaded map" + u);
         cout << "map " << u << " loaded.\n";
     }
     if (t.compare("validatemap") == 0) {
@@ -349,7 +354,7 @@ void commandProcessor::execute(string state,int i) {
     if (t.compare("addplayer") == 0) {
         int j = s.find("<");
         int k = s.find(">");
-        string u = s.substr(j, k-1);
+        string u = s.substr(j, k - 1);
         lis.list[i].saveEffect("player " + u + " added");
         cout << "player " << u << " added.\n";
     }
