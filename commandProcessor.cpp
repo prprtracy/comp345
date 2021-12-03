@@ -1,5 +1,4 @@
 #include"commandProcessor.h"
-#include "Map.h"
 using namespace std;
     //The methods of the command object.
     //parameter constructor
@@ -105,7 +104,7 @@ using namespace std;
     //the validate method, that take the current state and match with the command, then return a bool that whether or not its valid
     bool commandProcessor::validate(string state, string s) {
         string t = cut(s);
-        int u = 0;
+        int u = 0; 
         if (t.compare("loadmap") == 0) {
             if (state.compare("start") == 0 || state.compare("maploaded") == 0)
                 return true;
@@ -141,8 +140,6 @@ using namespace std;
             int j = s.find("<");
             int k = s.find(">");
             string u = s.substr(j , k-1);
-            cout << "Please select 1 to 5 different maps.\n";
-
             lis.list[i].saveEffect("list of maps"+u);
             cout << "map Map1, Map2, Map3 loaded.\n";
         }
