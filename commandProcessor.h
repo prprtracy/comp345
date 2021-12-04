@@ -27,12 +27,34 @@ public:
 	void add(command c);
 };
 
+class Tournament {
+public:
+	string M;
+	string P;
+	int G;
+	int D;
+	Tournament();
+	Tournament(string m, string p, int g, int d);
+	vector<string> getm();
+	vector<string> getp();
+	int getg();
+	int getd();
+	void showTournament();
+};
+
 class commandProcessor {
 private:
 	string readCommand();
 	void saveCommand(string s);
 public:
 	//the commandProcessor contains a command list
+	bool isTournament(string s);
+	vector<string> cutTournament(string s);
+	string makeM(vector<string> v);
+	string makeP(vector<string> v);
+	int makeG(vector<string> v);
+	int makeD(vector<string> v);
+	Tournament createTournament(string command);
 	commandList lis;
 	commandProcessor();
 	commandProcessor(commandList cl);

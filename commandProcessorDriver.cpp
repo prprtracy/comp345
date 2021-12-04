@@ -4,8 +4,7 @@ using namespace std;
 int main() {
 	//simulate engine for demo use, the string in the vector represents each state of the game, the dynamic pointer points to current state
 	int pointer = 0;
-	vector<string> engine= {"start","maploaded","mapvalidated","playersadded","assignreignforcement","win"};
-	cout << engine.size();
+	vector<string> engine = { "start","maploaded","mapvalidated","playersadded","assignreignforcement","win" };
 	//creates the command processor and file adaptor
 	commandProcessor cp = commandProcessor();
 	fileCommandProcessorAdaptor fcpa = fileCommandProcessorAdaptor("commands.txt");
@@ -16,11 +15,17 @@ int main() {
 	int selection = 0;
 	cin >> selection;
 	//the looping menu stops at execute
-	while (selection == 1 || selection == 2||selection==3) {
+	while (selection == 1 || selection == 2 || selection == 3) {
 		//option 1, input by console calling the getcommand method
 		if (selection == 1) {
 			cout << "Please enter the command:\n";
 			cp.getCommand();
+			int index = cp.lis.list.size();
+			if (cp.lis.list[index].getContent().substr(0,10).compare("Tournament") == 0) {
+				cout << "Entering tournament mode————\n";
+				Tournament t=cp.createTournament(cp.lis.list[index].getContent());
+				t.showTournament();
+			}
 			cout << "\nCurrent commands(first in first out):\n";
 			cp.showList();
 			cout << "\n";
@@ -44,10 +49,10 @@ int main() {
 			int index = 0;
 			cout << "start executing the command list\n";
 			cout << "simulated game engine start looping\n";
-			while (pointer < engine.size()&&index<cp.lis.getList().size()) {
-				cout << "current phase: " << engine[pointer]<<"\n";
+			while (pointer < engine.size() && index < cp.lis.getList().size()) {
+				cout << "current phase: " << engine[pointer] << "\n";
 				string s = cp.lis.list[index].getContent();
-				string t=cp.cut(s);
+				string t = cp.cut(s);
 				//skipping the ingame event
 				if (pointer == 4) {
 					cout << "game running...\ngamefinished.\n";
@@ -70,7 +75,7 @@ int main() {
 						pointer = 6;
 				}
 				else
-					cout << "the command "<<s<< " is not in valid state to run.\n";
+					cout << "the command " << s << " is not in valid state to run.\n";
 				index += 1;
 			}
 			selection = 0;
