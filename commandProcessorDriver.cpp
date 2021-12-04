@@ -46,7 +46,7 @@ int main() {
             cout << "\n";
             cout << "Please select one of the following choices:\n";
             cout << "1. input by console.\n" << "2. continue input by another .txt file\n" << "3. end of input and start execute\n";
-            cin >> selection;
+
         }
         //option 3 and looping, validating and excuting the methods from the list
         if (selection == 3) {
@@ -84,6 +84,8 @@ int main() {
             }
             selection = 0;
         }
+
+
     }
     cout << "\nexecution finished, thanks for using\n";
     return 0;

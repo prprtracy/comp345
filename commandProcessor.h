@@ -31,16 +31,16 @@ class Tournament {
 public:
     string M;
     string P;
-    int G;
-    int D;
+    int G;//number of games
+    int D;//number of turns
     Tournament();
     Tournament(string m, string p, int g, int d);
-    vector<string> getm();
-    vector<string> getp();
-    int getg();
-    int getd();
-    void showTournament();
-    void showResult (Tournament t);
+    vector<string> getm(); //return the vecotr of map
+    vector<string> getp(); //return the vector of players
+    int getg(); //return number of games
+    int getd(); //return number of turns
+    void showTournament(); //print the details of the game
+    void showResult (Tournament t); //print the final result of the game
 };
 
 class commandProcessor {
