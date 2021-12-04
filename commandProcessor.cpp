@@ -6,9 +6,6 @@ command::command(string s) {
     content = s;
 }
 //regular setter&getter
-void command::setContent(string s) {
-    content = s;
-}
 string command::getContent() {
     return content;
 }
@@ -113,7 +110,7 @@ bool commandProcessor::isTournament(string s) {
 vector<string> commandProcessor::cutTournament(string s) {
     vector<string>v;
     string t = s.substr(10);
-    if (t[1] == '-' && t[2] == 'M') {
+    if (t[0] == '-' && t[1] == 'M') {
         int i = t.find(">");
         if (i != -1) {
             string u = t.substr(0, i + 1);
@@ -121,7 +118,7 @@ vector<string> commandProcessor::cutTournament(string s) {
             t = t.substr(i + 1);
         }
     }
-    if (t[1] == '-' && t[2] == 'P') {
+    if (t[0] == '-' && t[1] == 'P') {
         int i = t.find(">");
         if (i != -1) {
             string u = t.substr(0, i + 1);
@@ -129,7 +126,7 @@ vector<string> commandProcessor::cutTournament(string s) {
             t = t.substr(i + 1);
         }
     }
-    if (t[1] == '-' && t[2] == 'G') {
+    if (t[0] == '-' && t[1] == 'G') {
         int i = t.find(">");
         if (i != -1) {
             string u = t.substr(0, i + 1);
@@ -137,7 +134,7 @@ vector<string> commandProcessor::cutTournament(string s) {
             t = t.substr(i + 1);
         }
     }
-    if (t[1] == '-' && t[2] == 'D') {
+    if (t[0] == '-' && t[1] == 'D') {
         int i = t.find(">");
         if (i != -1) {
             string u = t.substr(0, i + 1);

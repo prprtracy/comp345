@@ -20,18 +20,21 @@ int main() {
 		if (selection == 1) {
 			cout << "Please enter the command:\n";
 			cp.getCommand();
-			int index = cp.lis.list.size();
-			if (cp.lis.list[index].getContent().substr(0,10).compare("Tournament") == 0) {
-				cout << "Entering tournament mode————\n";
-				Tournament t=cp.createTournament(cp.lis.list[index].getContent());
+			int index = cp.lis.list.size()-1;
+			if (cp.isTournament(cp.lis.list[index].getContent())) {
+				cout << "Entering tournament mode------\n";
+				Tournament t = cp.createTournament(cp.lis.list[index].getContent());
 				t.showTournament();
+				selection = 4;
 			}
-			cout << "\nCurrent commands(first in first out):\n";
-			cp.showList();
-			cout << "\n";
-			cout << "Please select one of the following choices:\n";
-			cout << "1. continue input by console.\n" << "2. input by a .txt file\n" << "3. end of input and start execute\n";
-			cin >> selection;
+			else {
+				cout << "\nCurrent commands(first in first out):\n";
+				cp.showList();
+				cout << "\n";
+				cout << "Please select one of the following choices:\n";
+				cout << "1. continue input by console.\n" << "2. input by a .txt file\n" << "3. end of input and start execute\n";
+				cin >> selection;
+			}
 		}
 		//option 2, input by file input stream calling the getfilecommand method
 		if (selection == 2) {
