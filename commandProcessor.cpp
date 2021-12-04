@@ -213,7 +213,7 @@ int commandProcessor::makeD(vector<string> v) {
         throw;
 }
 
-Tournament createTournament(string command) {
+Tournament commandProcessor::createTournament(string command) {
     try {
         if (isTournament(command)) {
             vector<string> v = cutTournament(command);
