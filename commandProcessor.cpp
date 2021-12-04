@@ -45,59 +45,68 @@ int findAll(string str, string sub) {
     return positions.size();
 }
 
-    
-
-    Tournament::Tournament() {}
-    Tournament::Tournament(string m, string p, int g, int d) {
-        M = m;
-        P = p;
-        G = g;
-        D = d;
-    }
-
-    vector<string> Tournament::getm() {
-        string s = M;
-        vector<string> v;
-        int i = s.find(",");
-        int j = findAll(s, ",");
-        for (int k = 0; k < j; k++) {
-            string t = s.substr(0, i);
-            v.push_back(t);
-            s = s.substr(i + 1);
+void Tournament:: showResult (Tournament t){
+    for (int i =1; i <= t.getm().size(); i++){
+        cout<<"Map: "<< i <<endl;
+        for (int j=1; j<= t.getg(); j++){
+            cout<<"Game: "<< j ;
+            string random = t.getp()[rand() % t.getp().size()];
+            cout<<" Winner: " <<random <<endl;
         }
-        v.push_back(s);
-        return v;
     }
+}
 
-    vector<string> Tournament::getp() {
-        string s = P;
-        vector<string> v;
-        int i = s.find(",");
-        int j = findAll(s, ",");
-        for (int k = 0; k < j; k++) {
-            string t = s.substr(0, i);
-            v.push_back(t);
-            s = s.substr(i + 1);
-        }
-        v.push_back(s);
-        return v;
+Tournament::Tournament() {}
+Tournament::Tournament(string m, string p, int g, int d) {
+    M = m;
+    P = p;
+    G = g;
+    D = d;
+}
+
+vector<string> Tournament::getm() {
+    string s = M;
+    vector<string> v;
+    int i = s.find(",");
+    int j = findAll(s, ",");
+    for (int k = 0; k < j; k++) {
+        string t = s.substr(0, i);
+        v.push_back(t);
+        s = s.substr(i + 1);
     }
+    v.push_back(s);
+    return v;
+}
 
-
-    int Tournament::getg() {
-        return G;
+vector<string> Tournament::getp() {
+    string s = P;
+    vector<string> v;
+    int i = s.find(",");
+    int j = findAll(s, ",");
+    for (int k = 0; k < j; k++) {
+        string t = s.substr(0, i);
+        v.push_back(t);
+        s = s.substr(i + 1);
     }
+    v.push_back(s);
+    return v;
+}
 
-    int Tournament::getd() {
-        return D;
-    }
 
-    void Tournament::showTournament() {
-        cout << "M: " << M;
-        cout << "\nP: " << P;
-        cout << "\nG: " << G;
-        cout << "\nD: " << D;
-    }
+int Tournament::getg() {
+    return G;
+}
+
+int Tournament::getd() {
+    return D;
+}
+
+void Tournament::showTournament() {
+    cout << "M: " << M;
+    cout << "\nP: " << P;
+    cout << "\nG: " << G;
+    cout << "\nD: " << D;
+}
 
 bool commandProcessor::isTournament(string s) {
     string t = s.substr(0, 10);

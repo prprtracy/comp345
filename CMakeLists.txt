@@ -24,4 +24,5 @@ add_executable(comp345
         PlayerDriver.cpp Part3Driver.cpp
         commandProcessorDriver.cpp
         commandProcessor.h
-        commandProcessor.cpp)
+        commandProcessor.cpp
+        )
