@@ -45,13 +45,13 @@ int findAll(string str, string sub) {
     return positions.size();
 }
 
-void Tournament:: showResult (Tournament t){
-    for (int i =1; i <= t.getm().size(); i++){
-        cout<<"Map: "<< i <<endl;
-        for (int j=1; j<= t.getg(); j++){
-            cout<<"Game: "<< j ;
+void Tournament::showResult(Tournament t) {
+    for (int i = 1; i <= t.getm().size(); i++) {
+        cout << "Map: " << getm()[i-1] << endl;
+        for (int j = 1; j <= t.getg(); j++) {
+            cout << "Game " << j<<": ";
             string random = t.getp()[rand() % t.getp().size()];
-            cout<<" Winner: " <<random <<endl;
+            cout << " Winner: " << random << endl;
         }
     }
 }
@@ -84,9 +84,14 @@ vector<string> Tournament::getp() {
     int i = s.find(",");
     int j = findAll(s, ",");
     for (int k = 0; k < j; k++) {
-        string t = s.substr(0, i);
-        v.push_back(t);
-        s = s.substr(i + 1);
+        if (i != -1) {
+            string t = s.substr(0, i);
+            v.push_back(t);
+            s = s.substr(i + 1);
+            i = s.find(",");
+        }
+        else
+            i = s.find(",");
     }
     v.push_back(s);
     return v;

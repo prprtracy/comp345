@@ -18,14 +18,16 @@ int main() {
     while (selection == 1 || selection == 2 || selection == 3) {
         //option 1, input by console calling the getcommand method
         if (selection == 1) {
-            cout << "Please enter the command:\n";
+            cout << "Please enter the command (without blank space):\n";
             cp.getCommand();
-            int index = cp.lis.list.size()-1;
+            int index = cp.lis.list.size() - 1;
             if (cp.isTournament(cp.lis.list[index].getContent())) {
+                //tournament-M<map1,map2,mp3>-P<aggressive,human,cheater,benevolent>-G<3>-D<30>
                 cout << "Entering tournament mode------\n";
                 Tournament t = cp.createTournament(cp.lis.list[index].getContent());
                 t.showTournament();
                 selection = 4;
+                cout << "\nRunning the game automatically...\nDone, the result is:\n";
                 t.showResult(t);
             }
             else {

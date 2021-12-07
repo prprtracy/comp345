@@ -40,7 +40,7 @@ public:
     int getg(); //return number of games
     int getd(); //return number of turns
     void showTournament(); //print the details of the game
-    void showResult (Tournament t); //print the final result of the game
+    void showResult(Tournament t); //print the final result of the game
 };
 
 class commandProcessor {
